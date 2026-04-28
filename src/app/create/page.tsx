@@ -91,7 +91,7 @@ export default function CreateTripPage() {
           <div style={{ border: '1px solid var(--border)', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--gold)' }}>—</span>
             <p style={{ fontSize: '14px', fontWeight: 300, color: 'rgba(232,238,248,0.4)', lineHeight: 1.7, fontStyle: 'italic' }}>
-              You'll receive a shareable link and invite code. Friends join with just their name — no sign-up required.
+              You&apos;ll receive a shareable link and invite code. Friends join with just their name — no sign-up required.
             </p>
           </div>
 

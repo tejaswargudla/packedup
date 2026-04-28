@@ -108,7 +108,7 @@ export default function JoinPage({ params }: { params: { code: string } }) {
             <div style={{ padding: '28px 24px 24px' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ width: '20px', height: '1px', background: 'var(--gold)', display: 'inline-block' }} />
-                You're invited
+                You&apos;re invited
               </div>
               <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 300, lineHeight: 0.95, letterSpacing: '-1px', marginBottom: '12px' }}>
                 {trip.name}
