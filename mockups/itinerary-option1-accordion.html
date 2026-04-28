@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itinerary – Option 1: Accordion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080e1a;
+    --surface: #0d1525;
+    --surface2: #111e30;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.12);
+    --border: rgba(232,238,248,0.08);
+    --border2: rgba(232,238,248,0.15);
+    --text: #e8eef8;
+    --muted: rgba(232,238,248,0.4);
+    --green: #5aaa7a;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOPBAR ── */
+  header {
+    height: 56px;
+    flex-shrink: 0;
+    background: rgba(8,14,26,0.97);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .header-meta {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .header-trip { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-dates { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .dot { color: var(--border2); flex-shrink: 0; }
+  .header-stat {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-left: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .body {
+    flex: 1;
+    display: flex;
+  }
+
+  /* ── SIDEBAR (desktop only) ── */
+  aside {
+    width: 220px;
+    flex-shrink: 0;
+    background: rgba(8,14,26,0.95);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .section-label {
+    padding: 24px 20px 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-item.active { color: var(--gold); border-color: rgba(201,168,76,0.12); background: rgba(201,168,76,0.06); }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .divider { height: 1px; background: var(--border); margin: 20px; }
+  .pool-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border: 1px solid var(--border); margin: 0 12px 4px;
+  }
+  .pool-label { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .pool-count { font-family: var(--mono); font-size: 12px; color: var(--gold); }
+
+  /* ── MAIN ── */
+  main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  /* ── ACCORDION ── */
+  .day-block { border: 1px solid var(--border); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface);
+    transition: background 0.2s;
+    gap: 12px;
+  }
+  .day-header:hover, .day-header.open { background: var(--surface2); }
+  .day-header.open { border-bottom: 1px solid var(--border); }
+
+  .day-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .day-num {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    background: var(--gold-dim); padding: 4px 10px;
+    border: 1px solid rgba(201,168,76,0.2); white-space: nowrap;
+  }
+  .day-date { font-family: var(--mono); font-size: 11px; color: var(--text); }
+  .day-pills { display: flex; gap: 5px; }
+  .day-pill {
+    font-family: var(--mono); font-size: 8px; color: var(--muted);
+    background: rgba(232,238,248,0.04); border: 1px solid var(--border);
+    padding: 2px 7px; white-space: nowrap;
+  }
+  .day-pill.has-items { color: var(--green); border-color: rgba(90,170,122,0.2); background: rgba(90,170,122,0.06); }
+
+  .day-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .day-total { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .chevron { font-family: var(--mono); font-size: 14px; color: var(--muted); transition: transform 0.25s; display: inline-block; }
+  .chevron.open { transform: rotate(90deg); }
+
+  .day-body { display: none; }
+  .day-body.open { display: block; }
+
+  .section-row { display: flex; border-bottom: 1px solid var(--border); }
+  .section-row:last-child { border-bottom: none; }
+
+  .section-type {
+    width: 100px;
+    flex-shrink: 0;
+    padding: 16px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    border-right: 1px solid var(--border);
+    background: rgba(8,14,26,0.3);
+  }
+  .section-type-label { font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+
+  .section-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+  .item-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .item-row:hover { background: rgba(201,168,76,0.03); }
+  .item-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .item-name { font-size: 13px; font-weight: 300; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-price { font-family: var(--mono); font-size: 9px; color: var(--muted); white-space: nowrap; }
+  .item-remove {
+    background: transparent; border: none; color: var(--muted);
+    cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px;
+    opacity: 0.5; flex-shrink: 0; transition: opacity 0.15s;
+    min-width: 32px; min-height: 32px; display: flex; align-items: center; justify-content: center;
+  }
+  .item-remove:hover { opacity: 1; color: #e07070; }
+
+  .add-btn {
+    width: 100%; padding: 12px 16px; background: transparent; border: none;
+    border-top: 1px dashed var(--border); color: var(--muted);
+    font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; cursor: pointer; text-align: left;
+    display: flex; align-items: center; gap: 8px; transition: all 0.15s;
+    min-height: 44px;
+  }
+  .add-btn:hover { color: var(--gold); background: rgba(201,168,76,0.04); }
+  .add-btn.empty { border-top: none; }
+
+  /* ── BOTTOM NAV (mobile only) ── */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(8,14,26,0.98);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+    align-items: stretch;
+  }
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.15s;
+  }
+  .bottom-nav-item.active { color: var(--gold); }
+  .bottom-nav-item .bnav-icon { font-size: 18px; }
+
+  /* ── PICKER OVERLAY ── */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(8,14,26,0.85); z-index: 200;
+    backdrop-filter: blur(3px); align-items: flex-end; justify-content: center;
+  }
+  .overlay.show { display: flex; }
+  .picker-panel {
+    width: 100%; max-width: 500px;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-bottom: none;
+    display: flex; flex-direction: column; max-height: 75vh;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  .picker-header {
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .picker-title-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .picker-title { font-size: 15px; font-weight: 300; }
+  .picker-close {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    width: 36px; height: 36px; cursor: pointer; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .picker-list { overflow-y: auto; flex: 1; }
+  .picker-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s; min-height: 56px;
+  }
+  .picker-item:hover { background: rgba(201,168,76,0.05); }
+  .vote-badge { font-family: var(--mono); font-size: 11px; color: var(--green); min-width: 32px; text-align: center; }
+  .picker-name { font-size: 14px; font-weight: 300; flex: 1; }
+  .pick-plus { font-family: var(--mono); font-size: 20px; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    aside { display: none; }
+    .bottom-nav { display: flex; }
+    main { padding: 12px 12px 80px; gap: 6px; }
+
+    .header-dates { display: none; }
+    .dot { display: none; }
+    .header-stat { display: none; }
+
+    .day-header { padding: 14px 16px; }
+    .day-pills { display: none; }
+    .day-right .day-total { display: none; }
+
+    .section-type { width: 70px; padding: 14px 10px; }
+    .section-type-label { font-size: 7px; }
+
+    .overlay { align-items: flex-end; }
+    .picker-panel { max-height: 85vh; border-radius: 0; }
+  }
+
+  @media (max-width: 400px) {
+    .logo { font-size: 11px; letter-spacing: 3px; padding: 0 14px; }
+    .day-date { font-size: 10px; }
+    .day-num { font-size: 8px; padding: 3px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PackedUp</div>
+  <div class="header-meta">
+    <span class="header-trip">Tokyo Trip 2025</span>
+    <span class="dot">·</span>
+    <span class="header-dates">Jan 6 – Jan 10</span>
+  </div>
+  <div class="header-stat">7 planned</div>
+</header>
+
+<div class="body">
+  <aside>
+    <div class="section-label">Navigation</div>
+    <nav>
+      <div class="nav-item"><span class="nav-icon">◈</span> Dashboard</div>
+      <div class="nav-item"><span class="nav-icon">◫</span> Boards</div>
+      <div class="nav-item active"><span class="nav-icon">≡</span> Itinerary</div>
+    </nav>
+    <div class="divider"></div>
+    <div class="section-label">Suggestion Pool</div>
+    <div class="pool-row"><span class="pool-label">🏨 Stay</span><span class="pool-count">4</span></div>
+    <div class="pool-row"><span class="pool-label">🍽️ Eat</span><span class="pool-count">6</span></div>
+    <div class="pool-row"><span class="pool-label">📍 Visit</span><span class="pool-count">5</span></div>
+  </aside>
+
+  <main>
+
+    <!-- DAY 1 — OPEN -->
+    <div class="day-block">
+      <div class="day-header open" onclick="toggleDay(this)">
+        <div class="day-left">
+          <span class="day-num">Day 1</span>
+          <span class="day-date">Mon, Jan 6</span>
+          <div class="day-pills">
+            <span class="day-pill has-items">🏨 1</span>
+            <span class="day-pill has-items">🍽️ 2</span>
+            <span class="day-pill">📍 0</span>
+          </div>
+        </div>
+        <div class="day-right">
+          <span class="day-total">3 items</span>
+          <span class="chevron open">›</span>
+        </div>
+      </div>
+      <div class="day-body open">
+        <div class="section-row">
+          <div class="section-type"><span>🏨</span><span class="section-type-label">Stay</span></div>
+          <div class="section-content">
+            <div class="item-row">
+              <div class="item-dot"></div>
+              <span class="item-name">Shinjuku Granbell Hotel</span>
+              <span class="item-price">¥18,000/night</span>
+              <button class="item-remove">×</button>
+            </div>
+            <button class="add-btn" onclick="showPicker()"><span>+</span> Add Stay</button>
+          </div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>🍽️</span><span class="section-type-label">Eat</span></div>
+          <div class="section-content">
+            <div class="item-row">
+              <div class="item-dot"></div>
+              <span class="item-name">Ichiran Ramen Shibuya</span>
+              <span class="item-price">¥1,200</span>
+              <button class="item-remove">×</button>
+            </div>
+            <div class="item-row">
+              <div class="item-dot"></div>
+              <span class="item-name">Tsukiji Outer Market</span>
+              <span class="item-price">¥800</span>
+              <button class="item-remove">×</button>
+            </div>
+            <button class="add-btn" onclick="showPicker()"><span>+</span> Add Eat</button>
+          </div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>📍</span><span class="section-type-label">Visit</span></div>
+          <div class="section-content">
+            <button class="add-btn empty" onclick="showPicker()"><span>+</span> Add Visit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-left">
+          <span class="day-num">Day 2</span>
+          <span class="day-date">Tue, Jan 7</span>
+          <div class="day-pills">
+            <span class="day-pill has-items">🏨 1</span>
+            <span class="day-pill has-items">🍽️ 1</span>
+            <span class="day-pill has-items">📍 2</span>
+          </div>
+        </div>
+        <div class="day-right"><span class="day-total">4 items</span><span class="chevron">›</span></div>
+      </div>
+      <div class="day-body">
+        <div class="section-row">
+          <div class="section-type"><span>🏨</span><span class="section-type-label">Stay</span></div>
+          <div class="section-content">
+            <div class="item-row"><div class="item-dot"></div><span class="item-name">Shinjuku Granbell Hotel</span><button class="item-remove">×</button></div>
+            <button class="add-btn" onclick="showPicker()"><span>+</span> Add Stay</button>
+          </div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>🍽️</span><span class="section-type-label">Eat</span></div>
+          <div class="section-content">
+            <div class="item-row"><div class="item-dot"></div><span class="item-name">Afuri Ramen Harajuku</span><button class="item-remove">×</button></div>
+            <button class="add-btn" onclick="showPicker()"><span>+</span> Add Eat</button>
+          </div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>📍</span><span class="section-type-label">Visit</span></div>
+          <div class="section-content">
+            <div class="item-row"><div class="item-dot"></div><span class="item-name">Senso-ji Temple</span><button class="item-remove">×</button></div>
+            <div class="item-row"><div class="item-dot"></div><span class="item-name">Shibuya Crossing</span><button class="item-remove">×</button></div>
+            <button class="add-btn" onclick="showPicker()"><span>+</span> Add Visit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 — EMPTY -->
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-left">
+          <span class="day-num">Day 3</span>
+          <span class="day-date">Wed, Jan 8</span>
+          <div class="day-pills">
+            <span class="day-pill">🏨 0</span>
+            <span class="day-pill">🍽️ 0</span>
+            <span class="day-pill">📍 0</span>
+          </div>
+        </div>
+        <div class="day-right"><span class="day-total" style="color:var(--muted)">empty</span><span class="chevron">›</span></div>
+      </div>
+      <div class="day-body">
+        <div class="section-row">
+          <div class="section-type"><span>🏨</span><span class="section-type-label">Stay</span></div>
+          <div class="section-content"><button class="add-btn empty" onclick="showPicker()"><span>+</span> Add Stay</button></div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>🍽️</span><span class="section-type-label">Eat</span></div>
+          <div class="section-content"><button class="add-btn empty" onclick="showPicker()"><span>+</span> Add Eat</button></div>
+        </div>
+        <div class="section-row">
+          <div class="section-type"><span>📍</span><span class="section-type-label">Visit</span></div>
+          <div class="section-content"><button class="add-btn empty" onclick="showPicker()"><span>+</span> Add Visit</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-left">
+          <span class="day-num">Day 4</span>
+          <span class="day-date">Thu, Jan 9</span>
+          <div class="day-pills">
+            <span class="day-pill">🏨 0</span>
+            <span class="day-pill has-items">🍽️ 1</span>
+            <span class="day-pill">📍 0</span>
+          </div>
+        </div>
+        <div class="day-right"><span class="day-total">1 item</span><span class="chevron">›</span></div>
+      </div>
+      <div class="day-body"></div>
+    </div>
+
+    <!-- DAY 5 -->
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-left">
+          <span class="day-num">Day 5</span>
+          <span class="day-date">Fri, Jan 10</span>
+          <div class="day-pills">
+            <span class="day-pill">🏨 0</span>
+            <span class="day-pill">🍽️ 0</span>
+            <span class="day-pill">📍 0</span>
+          </div>
+        </div>
+        <div class="day-right"><span class="day-total" style="color:var(--muted)">empty</span><span class="chevron">›</span></div>
+      </div>
+      <div class="day-body"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BOTTOM NAV (mobile) -->
+<div class="bottom-nav">
+  <div class="bottom-nav-item"><span class="bnav-icon">◈</span> Home</div>
+  <div class="bottom-nav-item"><span class="bnav-icon">◫</span> Boards</div>
+  <div class="bottom-nav-item active"><span class="bnav-icon">≡</span> Itinerary</div>
+</div>
+
+<!-- PICKER -->
+<div class="overlay" id="picker" onclick="hidePicker(event)">
+  <div class="picker-panel">
+    <div class="picker-header">
+      <div>
+        <div class="picker-title-sub">🍽️ Eat · Day 1</div>
+        <div class="picker-title">Mon, Jan 6</div>
+      </div>
+      <button class="picker-close" onclick="document.getElementById('picker').classList.remove('show')">×</button>
+    </div>
+    <div class="picker-list">
+      <div class="picker-item"><div class="vote-badge">👍5</div><div class="picker-name">Ichiran Ramen Shibuya</div><span class="pick-plus">+</span></div>
+      <div class="picker-item"><div class="vote-badge">👍3</div><div class="picker-name">Afuri Ramen Harajuku</div><span class="pick-plus">+</span></div>
+      <div class="picker-item"><div class="vote-badge" style="color:var(--muted)">👍1</div><div class="picker-name">Sushi Saito</div><span class="pick-plus">+</span></div>
+      <div class="picker-item"><div class="vote-badge" style="color:var(--muted)">👍0</div><div class="picker-name">Convenience Store Picnic</div><span class="pick-plus">+</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleDay(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    const open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    header.classList.toggle('open', !open);
+    chevron.classList.toggle('open', !open);
+  }
+  function showPicker() { document.getElementById('picker').classList.add('show'); }
+  function hidePicker(e) {
+    if (e.target === document.getElementById('picker'))
+      document.getElementById('picker').classList.remove('show');
+  }
+  document.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', showPicker));
+</script>
+</body>
+</html>

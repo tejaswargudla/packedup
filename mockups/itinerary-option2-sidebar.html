@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Itinerary – Option 2: Sidebar + Day Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080e1a;
+    --surface: #0d1525;
+    --surface2: #111e30;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.12);
+    --border: rgba(232,238,248,0.08);
+    --border2: rgba(232,238,248,0.15);
+    --text: #e8eef8;
+    --muted: rgba(232,238,248,0.4);
+    --green: #5aaa7a;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── TOPBAR ── */
+  header {
+    height: 56px;
+    flex-shrink: 0;
+    background: rgba(8,14,26,0.97);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    z-index: 50;
+  }
+  .logo {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 5px;
+    text-transform: uppercase; color: var(--gold);
+    padding: 0 20px; border-right: 1px solid var(--border);
+    display: flex; align-items: center; white-space: nowrap;
+  }
+  .header-meta { flex: 1; display: flex; align-items: center; padding: 0 16px; gap: 8px; overflow: hidden; }
+  .header-trip { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .header-dates { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+  .dot { color: var(--border2); flex-shrink: 0; }
+  .header-stat {
+    display: flex; align-items: center; padding: 0 16px;
+    border-left: 1px solid var(--border);
+    font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+  /* ── NAV SIDEBAR (desktop only) ── */
+  .nav-sidebar {
+    width: 200px; flex-shrink: 0;
+    background: rgba(8,14,26,0.95);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .section-label { padding: 24px 20px 10px; font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
+  nav { display: flex; flex-direction: column; gap: 2px; padding: 0 12px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; color: var(--muted);
+    border: 1px solid transparent; transition: all 0.2s;
+  }
+  .nav-item.active { color: var(--gold); border-color: rgba(201,168,76,0.12); background: rgba(201,168,76,0.06); }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+
+  /* ── DAY SELECTOR SIDEBAR (desktop only) ── */
+  .day-sidebar {
+    width: 190px; flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  .day-sidebar::-webkit-scrollbar { width: 3px; }
+  .day-sidebar::-webkit-scrollbar-thumb { background: var(--border2); }
+  .day-sidebar-header {
+    padding: 16px 16px 10px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+
+  .day-entry {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 14px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s; gap: 8px;
+  }
+  .day-entry:hover { background: var(--surface2); }
+  .day-entry.selected { background: var(--gold-dim); border-left: 2px solid var(--gold); padding-left: 12px; }
+
+  .day-entry-left { display: flex; flex-direction: column; gap: 3px; }
+  .day-entry-num { font-family: var(--mono); font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .day-entry-date { font-family: var(--mono); font-size: 10px; color: var(--text); }
+  .day-entry-count { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+  .day-entry-icons { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
+  .day-icon-row { font-size: 9px; font-family: var(--mono); color: var(--muted); }
+  .day-icon-row.filled { color: var(--green); }
+
+  /* ── MOBILE: horizontal day strip ── */
+  .day-strip {
+    display: none;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  .day-strip::-webkit-scrollbar { display: none; }
+  .day-strip-inner { display: flex; }
+  .day-chip {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 12px 16px; border-right: 1px solid var(--border);
+    cursor: pointer; flex-shrink: 0; transition: background 0.15s;
+    position: relative;
+  }
+  .day-chip:hover { background: var(--surface2); }
+  .day-chip.selected { background: var(--gold-dim); }
+  .day-chip.selected::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold);
+  }
+  .day-chip-num { font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+  .day-chip-date { font-family: var(--mono); font-size: 9px; color: var(--muted); white-space: nowrap; }
+  .day-chip-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
+  .day-chip-dot.hidden { opacity: 0; }
+
+  /* ── MAIN PANEL ── */
+  main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  main::-webkit-scrollbar { width: 4px; }
+  main::-webkit-scrollbar-thumb { background: var(--border2); }
+
+  .panel-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 16px;
+  }
+  .panel-day-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+  .panel-day-title { font-size: 24px; font-weight: 300; letter-spacing: 1px; }
+  .panel-day-stat { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 5px; }
+
+  .panel-nav { display: flex; gap: 8px; flex-shrink: 0; }
+  .panel-nav-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    width: 38px; height: 38px; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .panel-nav-btn:hover { color: var(--gold); border-color: rgba(201,168,76,0.3); }
+
+  .panel-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  .section-block { border: 1px solid var(--border); }
+  .section-block-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    background: rgba(8,14,26,0.3);
+  }
+  .section-block-emoji { font-size: 15px; }
+  .section-block-label { font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .section-block-count { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+  .item-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .item-row:hover { background: rgba(201,168,76,0.03); }
+  .item-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 14px; font-weight: 300; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .item-remove {
+    background: transparent; border: none; color: var(--muted);
+    cursor: pointer; font-size: 20px; line-height: 1; padding: 4px 8px;
+    opacity: 0.5; flex-shrink: 0; transition: all 0.15s;
+    min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center;
+  }
+  .item-remove:hover { opacity: 1; color: #e07070; }
+
+  .add-btn {
+    width: 100%; padding: 14px 18px; background: transparent; border: none;
+    color: var(--muted); font-family: var(--mono); font-size: 9px;
+    letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
+    text-align: left; display: flex; align-items: center; gap: 8px;
+    transition: all 0.15s; min-height: 48px;
+  }
+  .add-btn:hover { color: var(--gold); background: rgba(201,168,76,0.04); }
+  .add-btn.with-border { border-top: 1px dashed var(--border); }
+
+  /* ── BOTTOM NAV (mobile) ── */
+  .bottom-nav {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0;
+    height: 60px; background: rgba(8,14,26,0.98);
+    border-top: 1px solid var(--border); z-index: 50; align-items: stretch;
+  }
+  .bottom-nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 4px; cursor: pointer; color: var(--muted);
+    font-family: var(--mono); font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .bottom-nav-item.active { color: var(--gold); }
+  .bottom-nav-item .bnav-icon { font-size: 18px; }
+
+  /* ── PICKER ── */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(8,14,26,0.85); z-index: 200;
+    backdrop-filter: blur(3px); align-items: flex-end; justify-content: center;
+  }
+  .overlay.show { display: flex; }
+  .picker-panel {
+    width: 100%; max-width: 520px;
+    background: var(--surface); border: 1px solid var(--border2); border-bottom: none;
+    display: flex; flex-direction: column; max-height: 80vh;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(40px); } to { opacity:1; transform:translateY(0); } }
+  .picker-header {
+    padding: 18px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .picker-title-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .picker-title { font-size: 15px; font-weight: 300; }
+  .picker-close {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    width: 38px; height: 38px; cursor: pointer; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .picker-list { overflow-y: auto; flex: 1; }
+  .picker-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s; min-height: 56px;
+  }
+  .picker-item:hover { background: rgba(201,168,76,0.05); }
+  .vote-badge { font-family: var(--mono); font-size: 11px; color: var(--green); min-width: 32px; text-align: center; }
+  .picker-name { font-size: 14px; font-weight: 300; flex: 1; }
+  .pick-plus { font-family: var(--mono); font-size: 20px; color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-sidebar { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .day-sidebar { display: none; }
+    .day-strip { display: block; }
+    .bottom-nav { display: flex; }
+    .header-dates { display: none; }
+    .dot { display: none; }
+    .header-stat { display: none; }
+
+    .panel-header { padding: 18px 16px 14px; }
+    .panel-day-title { font-size: 20px; }
+    .panel-body { padding: 16px; gap: 14px; }
+    .panel-body { padding-bottom: 80px; }
+
+    .item-row { padding: 12px 14px; }
+    .add-btn { padding: 14px 14px; }
+    .section-block-header { padding: 12px 14px; }
+  }
+
+  @media (max-width: 400px) {
+    .logo { font-size: 11px; letter-spacing: 3px; padding: 0 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PackedUp</div>
+  <div class="header-meta">
+    <span class="header-trip">Tokyo Trip 2025</span>
+    <span class="dot">·</span>
+    <span class="header-dates">Jan 6 – Jan 10 · 5 days</span>
+  </div>
+  <div class="header-stat">7 planned</div>
+</header>
+
+<div class="body">
+
+  <!-- NAV SIDEBAR (desktop) -->
+  <div class="nav-sidebar">
+    <div class="section-label">Navigation</div>
+    <nav>
+      <div class="nav-item"><span class="nav-icon">◈</span> Dashboard</div>
+      <div class="nav-item"><span class="nav-icon">◫</span> Boards</div>
+      <div class="nav-item active"><span class="nav-icon">≡</span> Itinerary</div>
+    </nav>
+  </div>
+
+  <!-- DAY SIDEBAR (desktop) -->
+  <div class="day-sidebar">
+    <div class="day-sidebar-header">5 Days</div>
+
+    <div class="day-entry selected" onclick="selectDay(this,'Day 1','Monday, January 6','3 items planned')">
+      <div class="day-entry-left">
+        <span class="day-entry-num">Day 1</span>
+        <span class="day-entry-date">Mon, Jan 6</span>
+        <span class="day-entry-count">3 items</span>
+      </div>
+      <div class="day-entry-icons">
+        <span class="day-icon-row filled">🏨 ✓</span>
+        <span class="day-icon-row filled">🍽️ ✓</span>
+        <span class="day-icon-row">📍 –</span>
+      </div>
+    </div>
+
+    <div class="day-entry" onclick="selectDay(this,'Day 2','Tuesday, January 7','4 items planned')">
+      <div class="day-entry-left">
+        <span class="day-entry-num">Day 2</span>
+        <span class="day-entry-date">Tue, Jan 7</span>
+        <span class="day-entry-count">4 items</span>
+      </div>
+      <div class="day-entry-icons">
+        <span class="day-icon-row filled">🏨 ✓</span>
+        <span class="day-icon-row filled">🍽️ ✓</span>
+        <span class="day-icon-row filled">📍 ✓</span>
+      </div>
+    </div>
+
+    <div class="day-entry" onclick="selectDay(this,'Day 3','Wednesday, January 8','No items yet')">
+      <div class="day-entry-left">
+        <span class="day-entry-num">Day 3</span>
+        <span class="day-entry-date">Wed, Jan 8</span>
+        <span class="day-entry-count" style="color:var(--muted)">empty</span>
+      </div>
+      <div class="day-entry-icons">
+        <span class="day-icon-row">🏨 –</span>
+        <span class="day-icon-row">🍽️ –</span>
+        <span class="day-icon-row">📍 –</span>
+      </div>
+    </div>
+
+    <div class="day-entry" onclick="selectDay(this,'Day 4','Thursday, January 9','1 item planned')">
+      <div class="day-entry-left">
+        <span class="day-entry-num">Day 4</span>
+        <span class="day-entry-date">Thu, Jan 9</span>
+        <span class="day-entry-count">1 item</span>
+      </div>
+      <div class="day-entry-icons">
+        <span class="day-icon-row">🏨 –</span>
+        <span class="day-icon-row filled">🍽️ ✓</span>
+        <span class="day-icon-row">📍 –</span>
+      </div>
+    </div>
+
+    <div class="day-entry" onclick="selectDay(this,'Day 5','Friday, January 10','No items yet')">
+      <div class="day-entry-left">
+        <span class="day-entry-num">Day 5</span>
+        <span class="day-entry-date">Fri, Jan 10</span>
+        <span class="day-entry-count" style="color:var(--muted)">empty</span>
+      </div>
+      <div class="day-entry-icons">
+        <span class="day-icon-row">🏨 –</span>
+        <span class="day-icon-row">🍽️ –</span>
+        <span class="day-icon-row">📍 –</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wrapper for strip + main (needed on mobile) -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;">
+
+    <!-- DAY STRIP (mobile) -->
+    <div class="day-strip">
+      <div class="day-strip-inner">
+        <div class="day-chip selected" onclick="selectDayChip(this,'Day 1','Monday, January 6','3 items planned')">
+          <div class="day-chip-num">Day 1</div>
+          <div class="day-chip-date">Mon Jan 6</div>
+          <div class="day-chip-dot"></div>
+        </div>
+        <div class="day-chip" onclick="selectDayChip(this,'Day 2','Tuesday, January 7','4 items planned')">
+          <div class="day-chip-num">Day 2</div>
+          <div class="day-chip-date">Tue Jan 7</div>
+          <div class="day-chip-dot"></div>
+        </div>
+        <div class="day-chip" onclick="selectDayChip(this,'Day 3','Wednesday, January 8','No items yet')">
+          <div class="day-chip-num">Day 3</div>
+          <div class="day-chip-date">Wed Jan 8</div>
+          <div class="day-chip-dot hidden"></div>
+        </div>
+        <div class="day-chip" onclick="selectDayChip(this,'Day 4','Thursday, January 9','1 item planned')">
+          <div class="day-chip-num">Day 4</div>
+          <div class="day-chip-date">Thu Jan 9</div>
+          <div class="day-chip-dot"></div>
+        </div>
+        <div class="day-chip" onclick="selectDayChip(this,'Day 5','Friday, January 10','No items yet')">
+          <div class="day-chip-num">Day 5</div>
+          <div class="day-chip-date">Fri Jan 10</div>
+          <div class="day-chip-dot hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <main>
+      <div class="panel-header">
+        <div>
+          <div class="panel-day-sub" id="panel-sub">Day 1 · Mon, Jan 6</div>
+          <div class="panel-day-title" id="panel-title">Monday, January 6</div>
+          <div class="panel-day-stat" id="panel-stat">3 items planned</div>
+        </div>
+        <div class="panel-nav">
+          <button class="panel-nav-btn">‹</button>
+          <button class="panel-nav-btn">›</button>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="section-block">
+          <div class="section-block-header">
+            <span class="section-block-emoji">🏨</span>
+            <span class="section-block-label">Where to Stay</span>
+            <span class="section-block-count">1 item</span>
+          </div>
+          <div class="item-row">
+            <div class="item-dot"></div>
+            <div class="item-info">
+              <div class="item-name">Shinjuku Granbell Hotel</div>
+              <div class="item-sub">¥18,000 / night</div>
+            </div>
+            <button class="item-remove">×</button>
+          </div>
+          <button class="add-btn with-border" onclick="showPicker()"><span>+</span> Add Stay</button>
+        </div>
+
+        <div class="section-block">
+          <div class="section-block-header">
+            <span class="section-block-emoji">🍽️</span>
+            <span class="section-block-label">Where to Eat</span>
+            <span class="section-block-count">2 items</span>
+          </div>
+          <div class="item-row">
+            <div class="item-dot"></div>
+            <div class="item-info">
+              <div class="item-name">Ichiran Ramen Shibuya</div>
+              <div class="item-sub">¥1,200</div>
+            </div>
+            <button class="item-remove">×</button>
+          </div>
+          <div class="item-row">
+            <div class="item-dot"></div>
+            <div class="item-info">
+              <div class="item-name">Tsukiji Outer Market</div>
+              <div class="item-sub">¥800</div>
+            </div>
+            <button class="item-remove">×</button>
+          </div>
+          <button class="add-btn with-border" onclick="showPicker()"><span>+</span> Add Eat</button>
+        </div>
+
+        <div class="section-block">
+          <div class="section-block-header">
+            <span class="section-block-emoji">📍</span>
+            <span class="section-block-label">Places to Visit</span>
+            <span class="section-block-count">0 items</span>
+          </div>
+          <button class="add-btn" onclick="showPicker()"><span>+</span> Add Visit</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV (mobile) -->
+<div class="bottom-nav">
+  <div class="bottom-nav-item"><span class="bnav-icon">◈</span> Home</div>
+  <div class="bottom-nav-item"><span class="bnav-icon">◫</span> Boards</div>
+  <div class="bottom-nav-item active"><span class="bnav-icon">≡</span> Itinerary</div>
+</div>
+
+<!-- PICKER -->
+<div class="overlay" id="picker" onclick="hidePicker(event)">
+  <div class="picker-panel">
+    <div class="picker-header">
+      <div>
+        <div class="picker-title-sub">🍽️ Eat · Day 1</div>
+        <div class="picker-title">Mon, Jan 6</div>
+      </div>
+      <button class="picker-close" onclick="document.getElementById('picker').classList.remove('show')">×</button>
+    </div>
+    <div class="picker-list">
+      <div class="picker-item"><div class="vote-badge">👍5</div><div class="picker-name">Afuri Ramen Harajuku</div><span class="pick-plus">+</span></div>
+      <div class="picker-item"><div class="vote-badge">👍3</div><div class="picker-name">Sushi Saito</div><span class="pick-plus">+</span></div>
+      <div class="picker-item"><div class="vote-badge" style="color:var(--muted)">👍1</div><div class="picker-name">Convenience Store Picnic</div><span class="pick-plus">+</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function selectDay(el, sub, title, stat) {
+    document.querySelectorAll('.day-entry').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('panel-sub').textContent = sub;
+    document.getElementById('panel-title').textContent = title;
+    document.getElementById('panel-stat').textContent = stat;
+  }
+  function selectDayChip(el, sub, title, stat) {
+    document.querySelectorAll('.day-chip').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('panel-sub').textContent = sub;
+    document.getElementById('panel-title').textContent = title;
+    document.getElementById('panel-stat').textContent = stat;
+  }
+  function showPicker() { document.getElementById('picker').classList.add('show'); }
+  function hidePicker(e) {
+    if (e.target === document.getElementById('picker'))
+      document.getElementById('picker').classList.remove('show');
+  }
+  document.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', showPicker));
+</script>
+</body>
+</html>

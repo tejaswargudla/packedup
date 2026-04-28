@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PackedUp – MVP Wireframe</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2ec;
+    --sand: #e8e2d6;
+    --warm: #d4c9b4;
+    --accent: #e85d26;
+    --accent2: #2d6a4f;
+    --muted: #8a8070;
+    --wire: #c8bfaf;
+    --label: #6b5f50;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    padding: 48px 60px 32px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .doc-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+  .doc-logo span { color: var(--accent); }
+  .doc-meta {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* ── FLOW OVERVIEW ── */
+  .flow-section {
+    padding: 48px 60px;
+    border-bottom: 1px solid var(--wire);
+  }
+  .flow-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .flow-step {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 4px;
+  }
+
+  /* ── SCREENS GRID ── */
+  .screens-section {
+    padding: 48px 60px;
+  }
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px;
+  }
+
+  /* ── SCREEN CARD ── */
+  .screen-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .screen-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+  .screen-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .screen-desc {
+    font-size: 13px;
+    color: var(--label);
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+
+  /* ── WIRE FRAME ── */
+  .wire {
+    background: white;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .wire-bar {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wire-bar-dots { display: flex; gap: 5px; }
+  .wire-bar-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+  }
+  .wire-body { padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ── WIRE ELEMENTS ── */
+  .w-hero {
+    background: var(--sand);
+    border-radius: 8px;
+    padding: 28px 16px;
+    text-align: center;
+    border: 1.5px dashed var(--warm);
+  }
+  .w-hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .w-hero-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .w-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 4px;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .w-btn-outline {
+    background: transparent;
+    border: 2px solid var(--ink);
+    color: var(--ink);
+  }
+  .w-btn-sm {
+    padding: 6px 14px;
+    font-size: 12px;
+  }
+  .w-input {
+    border: 1.5px solid var(--wire);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--paper);
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .w-label { font-size: 11px; font-weight: 600; color: var(--label); margin-bottom: 4px; letter-spacing: 0.5px; }
+  .w-field { display: flex; flex-direction: column; gap: 4px; }
+  .w-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .w-divider { border: none; border-top: 1px solid var(--sand); }
+
+  .w-nav {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid var(--wire);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .w-nav-item {
+    flex: 1;
+    padding: 9px 6px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--muted);
+    border-right: 1px solid var(--wire);
+    cursor: pointer;
+  }
+  .w-nav-item:last-child { border-right: none; }
+  .w-nav-item.active { background: var(--ink); color: white; font-weight: 600; }
+
+  .w-card {
+    border: 1.5px solid var(--wire);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--paper);
+  }
+  .w-card-img {
+    width: 52px; height: 52px; min-width: 52px;
+    background: var(--sand);
+    border-radius: 6px;
+    border: 1px dashed var(--warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .w-card-body { flex: 1; }
+  .w-card-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .w-card-sub { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .w-vote-row { display: flex; gap: 8px; align-items: center; }
+  .w-vote-btn {
+    border: 1.5px solid var(--wire);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    background: white;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .w-vote-btn.yes { border-color: var(--accent2); color: var(--accent2); }
+  .w-vote-btn.no { border-color: #c0392b; color: #c0392b; }
+  .w-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--sand);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--label);
+  }
+  .w-badge.green { background: #d4edda; color: var(--accent2); }
+  .w-badge.orange { background: #fde8dd; color: var(--accent); }
+
+  .w-member {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--sand);
+    border: 2px solid white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: -8px;
+    color: var(--label);
+  }
+  .w-member:first-child { margin-left: 0; }
+  .w-members { display: flex; align-items: center; }
+
+  .w-day-block {
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    background: var(--paper);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 4px;
+  }
+  .w-day-title { font-size: 12px; font-weight: 700; font-family: 'Syne', sans-serif; margin-bottom: 6px; }
+  .w-day-item { font-size: 12px; color: var(--label); padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+  .w-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .w-dot.green { background: var(--accent2); }
+  .w-dot.blue { background: #2980b9; }
+
+  .w-progress {
+    height: 6px;
+    background: var(--sand);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .w-progress-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 3px;
+  }
+
+  .w-notif {
+    background: var(--sand);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--label);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .w-notif-icon { font-size: 16px; }
+
+  .w-stat {
+    flex: 1;
+    background: var(--sand);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .w-stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+  .w-stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .w-add-row {
+    border: 1.5px dashed var(--wire);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .w-add-row:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* annotation */
+  .annotations {
+    padding: 4px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ann {
+    font-size: 11px;
+    color: var(--label);
+    background: var(--sand);
+    padding: 3px 10px;
+    border-radius: 20px;
+    line-height: 1.6;
+  }
+
+  /* ── SCREEN 1: HOME ── */
+  /* ── SCREEN 2: CREATE ── */
+  /* ── SCREEN 3: DASHBOARD ── */
+  /* ── SCREEN 4: BOARD ── */
+  /* ── SCREEN 5: VOTE ── */
+  /* ── SCREEN 6: ITINERARY ── */
+
+  footer {
+    padding: 32px 60px;
+    border-top: 1px solid var(--wire);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 700px) {
+    .doc-header, .flow-section, .screens-section, footer { padding-left: 20px; padding-right: 20px; }
+    .screens-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="doc-header">
+  <div>
+    <div class="doc-logo">Packed<span>Up</span></div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px;">Group Trip Planner · MVP Wireframe</div>
+  </div>
+  <div class="doc-meta">
+    Version 1.0 · MVP Scope<br>
+    6 Screens · Web Responsive<br>
+    Stay / Eat / Visit Boards
+  </div>
+</header>
+
+<!-- USER FLOW -->
+<section class="flow-section">
+  <div class="section-label">User Flow</div>
+  <div class="flow-title">How it works — end to end</div>
+  <div class="flow-row">
+    <div class="flow-step">1. Home</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">2. Create Trip</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">3. Share Link</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">4. Friends Join</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">5. Suggest & Vote</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">6. Itinerary ✓</div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section class="screens-section">
+  <div class="section-label">Screens</div>
+  <div class="screens-grid">
+
+    <!-- SCREEN 1 – HOME -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 01</div>
+      <div class="screen-title">Home / Landing</div>
+      <div class="screen-desc">Entry point. Two actions: create a new trip or join one with a code. Clean, fast, no friction.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>packedup.app</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-hero">
+            <div class="w-hero-title">Plan trips.<br>Together.</div>
+            <div class="w-hero-sub">No more endless group chats</div>
+            <button class="w-btn">+ Create a Trip</button>
+            <button class="w-btn w-btn-outline">Join with Code</button>
+          </div>
+          <hr class="w-divider">
+          <div style="font-size:12px;color:var(--muted);text-align:center;">or enter invite code</div>
+          <div class="w-row">
+            <input class="w-input" placeholder="e.g. GOACREW24" style="flex:1">
+            <button class="w-btn w-btn-sm">Go →</button>
+          </div>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">📎 Share link or code</div>
+        <div class="ann">No login needed to join</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 2 – CREATE TRIP -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 02</div>
+      <div class="screen-title">Create Trip</div>
+      <div class="screen-desc">Trip creator fills in basic info. Gets a shareable link instantly to send to friends.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>New Trip</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-field">
+            <div class="w-label">TRIP NAME</div>
+            <input class="w-input" placeholder="e.g. Goa 2025 🏖️">
+          </div>
+          <div class="w-field">
+            <div class="w-label">DESTINATION</div>
+            <input class="w-input" placeholder="City, Country">
+          </div>
+          <div class="w-row">
+            <div class="w-field" style="flex:1">
+              <div class="w-label">FROM</div>
+              <input class="w-input" placeholder="Dec 20">
+            </div>
+            <div class="w-field" style="flex:1">
+              <div class="w-label">TO</div>
+              <input class="w-input" placeholder="Dec 26">
+            </div>
+          </div>
+          <div class="w-field">
+            <div class="w-label">YOUR NAME</div>
+            <input class="w-input" placeholder="So friends know who you are">
+          </div>
+          <button class="w-btn" style="width:100%">Create Trip & Get Link →</button>
+          <div class="w-notif">
+            <div class="w-notif-icon">🔗</div>
+            <div>packedup.app/trip/<b>GOACREW24</b> — Copy & share!</div>
+          </div>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">Auto-generates code</div>
+        <div class="ann">One-tap copy link</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 3 – TRIP DASHBOARD -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 03</div>
+      <div class="screen-title">Trip Dashboard</div>
+      <div class="screen-desc">Overview of the trip — members, progress, and quick access to the 3 boards.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>Goa 2025 🏖️</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-row" style="justify-content:space-between">
+            <div>
+              <div style="font-size:13px;color:var(--muted)">Dec 20 – 26 · Goa, India</div>
+              <div class="w-members" style="margin-top:8px">
+                <div class="w-member">R</div>
+                <div class="w-member">A</div>
+                <div class="w-member">S</div>
+                <div class="w-member">+2</div>
+              </div>
+            </div>
+            <button class="w-btn w-btn-sm w-btn-outline">+ Invite</button>
+          </div>
+          <div class="w-row">
+            <div class="w-stat"><div class="w-stat-num">8</div><div class="w-stat-label">Suggestions</div></div>
+            <div class="w-stat"><div class="w-stat-num">5</div><div class="w-stat-label">Members</div></div>
+            <div class="w-stat"><div class="w-stat-num">3</div><div class="w-stat-label">Finalized</div></div>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--label)">BOARDS</div>
+          <div class="w-card" style="cursor:pointer">
+            <div class="w-card-img">🏨</div>
+            <div class="w-card-body">
+              <div class="w-card-title">Where to Stay</div>
+              <div class="w-card-sub">3 suggestions · 2 votes pending</div>
+              <div class="w-progress"><div class="w-progress-fill" style="width:60%"></div></div>
+            </div>
+          </div>
+          <div class="w-card" style="cursor:pointer">
+            <div class="w-card-img">🍽️</div>
+            <div class="w-card-body">
+              <div class="w-card-title">Where to Eat</div>
+              <div class="w-card-sub">2 suggestions · voting open</div>
+              <div class="w-progress"><div class="w-progress-fill" style="width:30%"></div></div>
+            </div>
+          </div>
+          <div class="w-card" style="cursor:pointer">
+            <div class="w-card-img">📍</div>
+            <div class="w-card-body">
+              <div class="w-card-title">Places to Visit</div>
+              <div class="w-card-sub">3 suggestions · 1 finalized</div>
+              <div class="w-progress"><div class="w-progress-fill" style="width:80%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">Progress per board</div>
+        <div class="ann">Member avatars</div>
+        <div class="ann">Invite button</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 4 – BOARD (Stay/Eat/Visit) -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 04</div>
+      <div class="screen-title">Board View (e.g. Stay)</div>
+      <div class="screen-desc">All suggestions for one category. Friends can add new ones or vote on existing. Creator can finalize.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>🏨 Where to Stay</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-nav">
+            <div class="w-nav-item active">🏨 Stay</div>
+            <div class="w-nav-item">🍽️ Eat</div>
+            <div class="w-nav-item">📍 Visit</div>
+          </div>
+          <div class="w-card">
+            <div class="w-card-img">🏡</div>
+            <div class="w-card-body">
+              <div class="w-row" style="justify-content:space-between">
+                <div class="w-card-title">Zostel Goa</div>
+                <div class="w-badge green">✓ Leading</div>
+              </div>
+              <div class="w-card-sub">Hostel · ₹800/night · Added by Ravi</div>
+              <div class="w-vote-row">
+                <div class="w-vote-btn yes">👍 4</div>
+                <div class="w-vote-btn no">👎 1</div>
+                <div class="w-badge orange">2 pending</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-card">
+            <div class="w-card-img">🏨</div>
+            <div class="w-card-body">
+              <div class="w-card-title">La Plage Resort</div>
+              <div class="w-card-sub">Hotel · ₹3200/night · Added by Aisha</div>
+              <div class="w-vote-row">
+                <div class="w-vote-btn yes">👍 2</div>
+                <div class="w-vote-btn no">👎 2</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-add-row">+ Add a suggestion</div>
+          <button class="w-btn" style="width:100%;background:var(--accent2)">✓ Finalize Winner</button>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">Tab nav across boards</div>
+        <div class="ann">Live vote counts</div>
+        <div class="ann">Creator can finalize</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 5 – ADD SUGGESTION -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 05</div>
+      <div class="screen-title">Add Suggestion</div>
+      <div class="screen-desc">Simple form to add a place. MVP uses manual entry — name, description, optional link.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>+ Add Suggestion</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-nav">
+            <div class="w-nav-item active">🏨 Stay</div>
+            <div class="w-nav-item">🍽️ Eat</div>
+            <div class="w-nav-item">📍 Visit</div>
+          </div>
+          <div class="w-field">
+            <div class="w-label">PLACE NAME *</div>
+            <input class="w-input" placeholder="e.g. Zostel Goa">
+          </div>
+          <div class="w-field">
+            <div class="w-label">WHY THIS PLACE?</div>
+            <input class="w-input" placeholder="Great vibes, near beach, budget friendly...">
+          </div>
+          <div class="w-field">
+            <div class="w-label">LINK (optional)</div>
+            <input class="w-input" placeholder="booking.com, maps link, etc.">
+          </div>
+          <div class="w-row">
+            <div class="w-field" style="flex:1">
+              <div class="w-label">PRICE (optional)</div>
+              <input class="w-input" placeholder="₹800/night">
+            </div>
+          </div>
+          <div class="w-field">
+            <div class="w-label">YOUR NAME</div>
+            <input class="w-input" placeholder="So friends see who suggested">
+          </div>
+          <div class="w-row">
+            <button class="w-btn" style="flex:1">Submit Suggestion</button>
+            <button class="w-btn w-btn-outline w-btn-sm">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">No login required</div>
+        <div class="ann">Optional link field</div>
+        <div class="ann">V1: Google Places search</div>
+      </div>
+    </div>
+
+    <!-- SCREEN 6 – ITINERARY -->
+    <div class="screen-card">
+      <div class="screen-num">SCREEN 06</div>
+      <div class="screen-title">Final Itinerary</div>
+      <div class="screen-desc">Auto-generated after creator finalizes each board. Day-by-day view of what's decided.</div>
+      <div class="wire">
+        <div class="wire-bar">
+          <span>🗓️ Goa Itinerary</span>
+          <div class="wire-bar-dots"><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div><div class="wire-bar-dot"></div></div>
+        </div>
+        <div class="wire-body">
+          <div class="w-row" style="justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:14px;font-weight:700">Goa 2025 🏖️</div>
+              <div style="font-size:12px;color:var(--muted)">Dec 20 – 26 · 5 people</div>
+            </div>
+            <div class="w-badge green">✓ All set</div>
+          </div>
+          <div class="w-notif">
+            <div class="w-notif-icon">🏨</div>
+            <div><b>Staying at:</b> Zostel Goa · ₹800/night</div>
+          </div>
+          <div class="w-day-block">
+            <div class="w-day-title">DAY 1 — Dec 20</div>
+            <div class="w-day-item"><div class="w-dot"></div>Arrive · Check in Zostel</div>
+            <div class="w-day-item"><div class="w-dot blue"></div>Dinner: Thalassa Restaurant</div>
+          </div>
+          <div class="w-day-block">
+            <div class="w-day-title">DAY 2 — Dec 21</div>
+            <div class="w-day-item"><div class="w-dot green"></div>Visit: Dudhsagar Falls</div>
+            <div class="w-day-item"><div class="w-dot blue"></div>Lunch: Fisherman's Wharf</div>
+            <div class="w-day-item"><div class="w-dot green"></div>Evening: Anjuna Flea Market</div>
+          </div>
+          <div class="w-day-block">
+            <div class="w-day-title">DAY 3 — Dec 22</div>
+            <div class="w-day-item"><div class="w-dot green"></div>Visit: Fort Aguada</div>
+            <div class="w-day-item"><div class="w-dot blue"></div>Dinner: Voted TBD 🗳️</div>
+          </div>
+          <button class="w-btn" style="width:100%">📤 Share Itinerary</button>
+        </div>
+      </div>
+      <div class="annotations">
+        <div class="ann">Day-by-day view</div>
+        <div class="ann">Color coded by type</div>
+        <div class="ann">V1: PDF export</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div>PackedUp — MVP Wireframe · 6 Screens</div>
+  <div>Stay · Eat · Visit · Vote · Itinerary</div>
+</footer>
+
+</body>
+</html>
