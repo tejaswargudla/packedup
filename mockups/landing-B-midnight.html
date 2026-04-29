@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PackedUp — Plan Together</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0f2e;
+    --bg2: #0e1440;
+    --surface: #111852;
+    --surface2: #161e60;
+    --violet: #7c3aed;
+    --violet-light: #a855f7;
+    --violet-glow: rgba(124, 58, 237, 0.25);
+    --electric: #818cf8;
+    --white: #ffffff;
+    --off-white: rgba(255,255,255,0.85);
+    --muted: rgba(255,255,255,0.45);
+    --border: rgba(124, 58, 237, 0.25);
+    --border2: rgba(255,255,255,0.08);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID NOISE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    background: rgba(10, 15, 46, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--violet-light) 0%, var(--electric) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 10px 24px;
+    background: var(--violet);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-cta:hover {
+    background: var(--violet-light);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--violet-light);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    padding: 8px 20px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    background: rgba(124, 58, 237, 0.08);
+    position: relative;
+    z-index: 1;
+    animation: fadeInDown 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--violet-light);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -3px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.7s ease 0.1s both;
+  }
+
+  .hero-title-line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--violet-light) 0%, var(--electric) 60%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 44px;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.7s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.7s ease 0.3s both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 16px 40px;
+    background: var(--violet);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--violet-light), var(--violet));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { box-shadow: 0 8px 32px rgba(124, 58, 237, 0.5); transform: translateY(-1px); }
+
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-secondary {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    padding: 16px 32px;
+    background: transparent;
+    color: var(--off-white);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--violet); color: var(--white); }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    border-top: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+    padding: 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: rgba(14, 20, 64, 0.5);
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-item {
+    padding: 0 60px;
+    text-align: center;
+    border-right: 1px solid var(--border2);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--violet-light), var(--electric));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--violet-light);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--violet-light);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 64px;
+  }
+
+  .section-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--violet-light), var(--electric));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── STEPS ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    padding: 40px 32px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+    overflow: hidden;
+  }
+
+  .step-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--electric));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .step-card:hover {
+    background: var(--surface2);
+    border-color: var(--border);
+  }
+
+  .step-card:hover::after { transform: scaleX(1); }
+
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 72px;
+    font-weight: 800;
+    color: rgba(124, 58, 237, 0.12);
+    line-height: 1;
+    margin-bottom: 24px;
+    letter-spacing: -4px;
+  }
+
+  .step-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: var(--violet-glow);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  .step-desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── BOARDS ── */
+  .boards-section {
+    background: var(--bg2);
+    padding: 100px 24px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .boards-section::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .boards-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 64px;
+  }
+
+  .board-col {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .board-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .board-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .board-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+
+  .board-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .board-items {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .board-item {
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    transition: background 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .board-item:hover {
+    background: rgba(124, 58, 237, 0.1);
+    border-color: rgba(124, 58, 237, 0.3);
+  }
+
+  .board-item-name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .board-item-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .board-item-price {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .board-item-votes {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .vote-up { color: #4ade80; }
+  .vote-down { color: #f87171; }
+
+  .board-item-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: rgba(124, 58, 237, 0.2);
+    color: var(--violet-light);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+  }
+
+  /* ── TRIP CARD ── */
+  .demo-section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .demo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .demo-text {}
+
+  .demo-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 80px rgba(124, 58, 237, 0.08);
+  }
+
+  .demo-card-header {
+    background: linear-gradient(135deg, var(--violet) 0%, #4f46e5 100%);
+    padding: 28px;
+    position: relative;
+  }
+
+  .demo-card-trip {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .demo-card-dest {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .demo-card-invite {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: var(--white);
+  }
+
+  .demo-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .demo-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+  }
+
+  .demo-card-row-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .demo-card-row-value {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--off-white);
+  }
+
+  .demo-members {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .member-avatars {
+    display: flex;
+  }
+
+  .member-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: -8px;
+  }
+
+  .member-avatar:first-child { margin-left: 0; }
+
+  .member-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    padding: 100px 24px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-border-box {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 64px 48px;
+    background: rgba(22, 30, 96, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .cta-sub {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border2);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--violet-light), var(--electric));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FEATURE CHIPS ── */
+  .feature-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .chip:hover {
+    border-color: var(--violet);
+    color: var(--violet-light);
+    background: var(--violet-glow);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+
+    .stat-strip { flex-direction: column; gap: 28px; }
+    .stat-item { border-right: none; padding: 0; }
+
+    .steps-grid { grid-template-columns: 1fr; gap: 2px; }
+    .boards-grid { grid-template-columns: 1fr; }
+    .demo-layout { grid-template-columns: 1fr; }
+
+    .section { padding: 60px 20px; }
+    .boards-section { padding: 60px 20px; }
+    .demo-section { padding: 60px 20px; }
+    .cta-section { padding: 60px 20px; }
+
+    .cta-border-box { padding: 40px 24px; }
+    footer { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">PackedUp</div>
+  <ul class="nav-links">
+    <li><a href="#">How it works</a></li>
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <a href="#" class="nav-cta"><span>Get Started →</span></a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="badge">
+    <span class="badge-dot"></span>
+    Group travel planning · No sign-up required
+  </div>
+
+  <h1 class="hero-title">
+    Your group's<br />
+    <span class="hero-title-line2">next adventure</span><br />
+    planned together.
+  </h1>
+
+  <p class="hero-sub">
+    Create a trip, invite friends with a code, vote on the best places to stay, eat, and visit. No accounts needed.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary"><span>Create a Trip →</span></a>
+    <a href="#" class="btn-secondary">Enter invite code</a>
+  </div>
+</section>
+
+<!-- ── STAT STRIP ── -->
+<div class="stat-strip">
+  <div class="stat-item">
+    <span class="stat-num">7</span>
+    <span class="stat-label">Char code</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">0</span>
+    <span class="stat-label">Sign-ups needed</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">3</span>
+    <span class="stat-label">Planning boards</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">∞</span>
+    <span class="stat-label">Group members</span>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<div class="section">
+  <div class="section-label">Process</div>
+  <h2 class="section-title">How it <em>works</em></h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">✈️</div>
+      <div class="step-title">Create a trip</div>
+      <p class="step-desc">Enter your destination, dates, and name. Get an instant 7-character invite code and shareable link.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">👥</div>
+      <div class="step-title">Invite your crew</div>
+      <p class="step-desc">Share the code. Anyone can join with just their name — no account, no password, no friction.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">🗺️</div>
+      <div class="step-title">Plan together</div>
+      <p class="step-desc">Everyone adds suggestions, votes in real-time, and builds the itinerary collaboratively.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── BOARDS ── -->
+<section class="boards-section">
+  <div class="boards-inner">
+    <div class="section-label">Collaboration</div>
+    <h2 class="section-title">Three boards.<br /><em>One itinerary.</em></h2>
+
+    <div class="boards-grid">
+      <!-- Stay -->
+      <div class="board-col">
+        <div class="board-header">
+          <div class="board-dot" style="background:#818cf8"></div>
+          <span class="board-name">Stay</span>
+          <span class="board-count">4 suggestions</span>
+        </div>
+        <div class="board-items">
+          <div class="board-item">
+            <div class="board-item-name">The Leela Palace</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹8,500/night</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 5</span>&nbsp;<span class="vote-down">▼ 1</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item">
+            <div class="board-item-name">ITC Grand Goa</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹6,200/night</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 3</span>&nbsp;<span class="vote-down">▼ 0</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item" style="border-color:rgba(124,58,237,0.4); background:rgba(124,58,237,0.08)">
+            <div class="board-item-name">Taj Exotica ⭐</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹12,000/night</span>
+              <span class="board-item-badge">Finalized</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eat -->
+      <div class="board-col">
+        <div class="board-header">
+          <div class="board-dot" style="background:#f472b6"></div>
+          <span class="board-name">Eat</span>
+          <span class="board-count">6 suggestions</span>
+        </div>
+        <div class="board-items">
+          <div class="board-item">
+            <div class="board-item-name">Thalassa Beach Restaurant</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹2,400/person</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 7</span>&nbsp;<span class="vote-down">▼ 0</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item">
+            <div class="board-item-name">Gunpowder</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹900/person</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 4</span>&nbsp;<span class="vote-down">▼ 2</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item">
+            <div class="board-item-name">Fisherman's Wharf</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹1,200/person</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 2</span>&nbsp;<span class="vote-down">▼ 1</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visit -->
+      <div class="board-col">
+        <div class="board-header">
+          <div class="board-dot" style="background:#34d399"></div>
+          <span class="board-name">Visit</span>
+          <span class="board-count">5 suggestions</span>
+        </div>
+        <div class="board-items">
+          <div class="board-item">
+            <div class="board-item-name">Dudhsagar Falls</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">Free</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 8</span>&nbsp;<span class="vote-down">▼ 0</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item">
+            <div class="board-item-name">Old Goa Churches</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">Free</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 5</span>&nbsp;<span class="vote-down">▼ 1</span>
+              </span>
+            </div>
+          </div>
+          <div class="board-item">
+            <div class="board-item-name">Butterfly Beach</div>
+            <div class="board-item-meta">
+              <span class="board-item-price">₹500 ferry</span>
+              <span class="board-item-votes">
+                <span class="vote-up">▲ 6</span>&nbsp;<span class="vote-down">▼ 0</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRIP CARD DEMO ── -->
+<div class="demo-section">
+  <div class="demo-layout">
+    <div class="demo-text">
+      <div class="section-label">Trip overview</div>
+      <h2 class="section-title" style="margin-bottom: 24px">Everything<br /><em>in one place.</em></h2>
+      <p style="font-family: var(--font-body); font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 32px;">
+        Your trip lives at a shareable link. Anyone with the invite code can join, add ideas, vote, and contribute — in real-time.
+      </p>
+      <div class="feature-chips">
+        <div class="chip">⚡ Real-time votes</div>
+        <div class="chip">📱 Mobile first</div>
+        <div class="chip">🔗 Shareable link</div>
+        <div class="chip">🗓 Built-in itinerary</div>
+      </div>
+    </div>
+    <div>
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <div class="demo-card-trip">Goa 2025 🏖️</div>
+          <div class="demo-card-dest">📍 Goa, India</div>
+          <div class="demo-card-invite">XK7P2QA</div>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-card-row">
+            <span class="demo-card-row-label">Dates</span>
+            <span class="demo-card-row-value">Dec 23 – Dec 28, 2025</span>
+          </div>
+          <div class="demo-card-row">
+            <span class="demo-card-row-label">Duration</span>
+            <span class="demo-card-row-value">5 nights</span>
+          </div>
+          <div class="demo-card-row">
+            <span class="demo-card-row-label">Status</span>
+            <span class="demo-card-row-value" style="color: var(--violet-light);">● Planning</span>
+          </div>
+          <div class="demo-card-row">
+            <span class="demo-card-row-label">Suggestions</span>
+            <span class="demo-card-row-value">15 across 3 boards</span>
+          </div>
+        </div>
+        <div class="demo-members">
+          <div class="member-avatars">
+            <div class="member-avatar" style="background:#7c3aed">T</div>
+            <div class="member-avatar" style="background:#4f46e5">A</div>
+            <div class="member-avatar" style="background:#818cf8">R</div>
+            <div class="member-avatar" style="background:#a855f7">S</div>
+            <div class="member-avatar" style="background:#6366f1; font-size:9px">+3</div>
+          </div>
+          <span class="member-label">7 members joined</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-border-box">
+      <h2 class="cta-title">Ready to plan<br /><span style="background:linear-gradient(135deg,var(--violet-light),var(--electric)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">together?</span></h2>
+      <p class="cta-sub">Create your trip in 30 seconds. No sign-up required. Share a code and your whole group is in.</p>
+      <div class="hero-actions" style="justify-content:center">
+        <a href="#" class="btn-primary"><span>Create a Trip — it's free →</span></a>
+      </div>
+      <p style="font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:20px; letter-spacing:1px;">
+        No credit card · No account · Just a code
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">PackedUp</div>
+  <div class="footer-copy">© 2025 PackedUp · Made for group travelers</div>
+</footer>
+
+</body>
+</html>

@@ -1,18 +1,24 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, DM_Mono } from 'next/font/google'
+import { Playfair_Display, JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 
-const cormorant = Cormorant_Garamond({
+const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-serif',
-  weight: ['300', '400', '600'],
+  weight: ['400', '700'],
   style: ['normal', 'italic'],
 })
 
-const dmMono = DM_Mono({
+const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
+  weight: ['300', '400', '500'],
+})
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
   weight: ['300', '400', '500'],
 })
 
@@ -24,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${cormorant.variable} ${dmMono.variable} font-serif bg-bg text-offwhite antialiased`}>
+      <body className={`${playfair.variable} ${jetbrains.variable} ${jakarta.variable} bg-bg text-offwhite antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PackedUp — Plan Your Next Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&family=Work+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f0e6;
+    --bg2: #ede7d5;
+    --surface: #ffffff;
+    --surface2: #faf7f0;
+    --navy: #1a2744;
+    --navy2: #243358;
+    --coral: #e8553e;
+    --coral-light: #f07050;
+    --coral-muted: rgba(232, 85, 62, 0.15);
+    --text: #1a2744;
+    --muted: rgba(26, 39, 68, 0.5);
+    --muted2: rgba(26, 39, 68, 0.3);
+    --border: rgba(26, 39, 68, 0.12);
+    --border-strong: rgba(26, 39, 68, 0.25);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Work Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── TOPBAR STRIPE ── */
+  .topbar-stripe {
+    background: var(--navy);
+    height: 3px;
+    width: 100%;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(245, 240, 230, 0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 68px;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -1px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+
+  .nav-logo-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--coral);
+    margin-left: 2px;
+    margin-bottom: 2px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--navy); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 12px 28px;
+    background: var(--coral);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-cta:hover {
+    background: var(--coral-light);
+    transform: translateY(-1px);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 48px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+    position: relative;
+  }
+
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag-line {
+    display: inline-block;
+    width: 32px;
+    height: 2px;
+    background: var(--coral);
+    border-radius: 1px;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -4px;
+    color: var(--navy);
+    margin-bottom: 32px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--coral);
+  }
+
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 18px 40px;
+    background: var(--coral);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-primary:hover {
+    background: var(--coral-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(232, 85, 62, 0.35);
+  }
+
+  .btn-secondary {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    padding: 18px 32px;
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--border-strong);
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: var(--bg);
+  }
+
+  /* ── HERO CARD ── */
+  .hero-card {
+    width: 320px;
+    flex-shrink: 0;
+  }
+
+  .mini-trip-card {
+    background: var(--navy);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(26, 39, 68, 0.25), 0 8px 24px rgba(26, 39, 68, 0.15);
+    transform: rotate(2deg);
+    transition: transform 0.3s ease;
+  }
+
+  .mini-trip-card:hover { transform: rotate(0deg); }
+
+  .mini-card-img {
+    height: 160px;
+    background: linear-gradient(135deg, #e8553e 0%, #f59e0b 50%, #0ea5e9 100%);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    font-size: 48px;
+  }
+
+  .mini-card-body {
+    padding: 20px;
+  }
+
+  .mini-card-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .mini-card-dest {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .mini-card-code {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--coral);
+    background: rgba(232, 85, 62, 0.15);
+    border: 1px solid rgba(232, 85, 62, 0.3);
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+
+  .mini-card-members {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mini-avatars {
+    display: flex;
+  }
+
+  .mini-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    margin-left: -6px;
+  }
+
+  .mini-avatar:first-child { margin-left: 0; }
+
+  .mini-member-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--navy);
+    padding: 18px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    gap: 0;
+    margin: 0;
+  }
+
+  .marquee-track {
+    display: inline-flex;
+    gap: 48px;
+    animation: marquee 22s linear infinite;
+  }
+
+  .marquee-track:nth-child(2) { animation-delay: -11s; }
+
+  .marquee-item {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .marquee-sep {
+    color: var(--coral);
+    font-size: 8px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── HOW IT WORKS ── */
+  .hiw-section {
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 0.95;
+    color: var(--navy);
+    margin-bottom: 64px;
+  }
+
+  .section-heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--coral);
+  }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .step {
+    position: relative;
+  }
+
+  .step-number {
+    font-family: var(--font-display);
+    font-size: 120px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(26, 39, 68, 0.06);
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    z-index: 0;
+    letter-spacing: -8px;
+  }
+
+  .step-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-emoji {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .step-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .step-connector {
+    position: absolute;
+    top: 50px;
+    right: -16px;
+    width: 32px;
+    height: 2px;
+    background: var(--border-strong);
+    z-index: 1;
+  }
+
+  /* ── BOARDS ── */
+  .boards-section {
+    background: var(--navy);
+    padding: 100px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boards-deco {
+    position: absolute;
+    right: -80px;
+    bottom: -80px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: rgba(232, 85, 62, 0.08);
+    pointer-events: none;
+  }
+
+  .boards-deco2 {
+    position: absolute;
+    left: -40px;
+    top: -60px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: rgba(232, 85, 62, 0.05);
+    pointer-events: none;
+  }
+
+  .boards-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .boards-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(232, 85, 62, 0.8);
+    margin-bottom: 16px;
+  }
+
+  .boards-heading {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 64px;
+  }
+
+  .boards-heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--coral);
+  }
+
+  .boards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .board {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .board:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232, 85, 62, 0.4);
+  }
+
+  .board-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .board-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .board-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .board-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .board-items {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .b-item {
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .b-item:hover { background: rgba(255,255,255,0.08); }
+
+  .b-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .b-item-name {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .b-item-votes {
+    display: flex;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .b-vote-up { color: #4ade80; }
+  .b-vote-down { color: #f87171; }
+
+  .b-item-price {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+  }
+
+  .b-item-winner {
+    background: rgba(232, 85, 62, 0.12) !important;
+    border-color: rgba(232, 85, 62, 0.35) !important;
+  }
+
+  .b-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    background: var(--coral);
+    color: #fff;
+    border-radius: 100px;
+  }
+
+  /* ── FEATURES ── */
+  .features-section {
+    padding: 100px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    border: 2px solid var(--navy);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .feature-tile {
+    padding: 40px;
+    background: var(--surface2);
+    border: 1px solid transparent;
+    transition: background 0.2s;
+  }
+
+  .feature-tile:hover { background: #fff; }
+
+  .feature-emoji {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  .feature-desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--coral);
+    padding: 100px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '✈';
+    position: absolute;
+    font-size: 400px;
+    opacity: 0.05;
+    top: -80px;
+    right: -60px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .cta-inner { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 900;
+    letter-spacing: -4px;
+    line-height: 0.9;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .cta-sub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 44px;
+    line-height: 1.7;
+  }
+
+  .btn-white {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 20px 48px;
+    background: #fff;
+    color: var(--coral);
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-white:hover {
+    background: var(--navy);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .cta-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -1px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+
+  .footer-logo-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--coral);
+    margin-left: 2px;
+    margin-bottom: 2px;
+  }
+
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 60px 24px 40px;
+    }
+
+    .hero-card { display: none; }
+    .steps-row { grid-template-columns: 1fr; gap: 40px; }
+    .step-connector { display: none; }
+    .boards-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+
+    .hiw-section { padding: 60px 24px; }
+    .boards-section { padding: 60px 24px; }
+    .features-section { padding: 60px 24px; }
+    .cta-section { padding: 60px 24px; }
+
+    footer { flex-direction: column; gap: 12px; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar-stripe"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">PackedUp<span class="nav-logo-dot"></span></div>
+  <ul class="nav-links">
+    <li><a href="#">How it works</a></li>
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Start planning →</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">
+      <span class="hero-tag-line"></span>
+      Collaborative trip planning
+    </div>
+    <h1 class="hero-title">
+      Plan your<br />next trip<br /><em>together.</em>
+    </h1>
+    <p class="hero-sub">
+      Create a trip, share a code, and let the whole group vote on where to stay, eat, and explore. No sign-up required.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Create a Trip ✈️</a>
+      <a href="#" class="btn-secondary">Join with code</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="mini-trip-card">
+      <div class="mini-card-img">🏖️</div>
+      <div class="mini-card-body">
+        <div class="mini-card-name">Goa 2025</div>
+        <div class="mini-card-dest">📍 Goa, India · Dec 23–28</div>
+        <div class="mini-card-code">XK7P2QA</div>
+        <div class="mini-card-members">
+          <div class="mini-avatars">
+            <div class="mini-avatar" style="background:#e8553e">T</div>
+            <div class="mini-avatar" style="background:#1a2744">A</div>
+            <div class="mini-avatar" style="background:#f59e0b">R</div>
+            <div class="mini-avatar" style="background:#10b981">S</div>
+            <div class="mini-avatar" style="background:#6366f1; font-size:9px">+3</div>
+          </div>
+          <span class="mini-member-label">7 planning together</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MARQUEE ── -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Create a trip <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Share invite code <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Vote on stays <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Find great restaurants <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Explore together <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Build your itinerary <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">No sign-up needed <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Create a trip <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Share invite code <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Vote on stays <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Find great restaurants <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Explore together <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Build your itinerary <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">No sign-up needed <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="hiw-section">
+  <div class="section-eyebrow">How it works</div>
+  <h2 class="section-heading">Three steps<br />to <em>adventure.</em></h2>
+
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <span class="step-emoji">✈️</span>
+        <div class="step-title">Create your trip</div>
+        <p class="step-desc">Enter destination and dates. Get a 7-character invite code and shareable link instantly — no account needed.</p>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <span class="step-emoji">👥</span>
+        <div class="step-title">Invite everyone</div>
+        <p class="step-desc">Share the code or link. Anyone joins with just their name — no password, no friction, no waiting.</p>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <span class="step-emoji">🗺️</span>
+        <div class="step-title">Plan together</div>
+        <p class="step-desc">Everyone suggests places, votes in real-time, and the group's favorites automatically become the itinerary.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOARDS ── -->
+<section class="boards-section">
+  <div class="boards-deco"></div>
+  <div class="boards-deco2"></div>
+  <div class="boards-inner">
+    <div class="boards-eyebrow">The boards</div>
+    <h2 class="boards-heading">Stay. Eat.<br /><em>Visit.</em></h2>
+
+    <div class="boards-grid">
+      <!-- Stay -->
+      <div class="board">
+        <div class="board-header">
+          <div class="board-icon" style="background: rgba(99, 102, 241, 0.2);">🏨</div>
+          <div>
+            <div class="board-title">Stay</div>
+            <div class="board-sub">Where you sleep</div>
+          </div>
+        </div>
+        <div class="board-items">
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">The Leela Palace</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 5</span>
+                <span class="b-vote-down">▼ 1</span>
+              </div>
+            </div>
+            <div class="b-item-price">₹8,500/night</div>
+          </div>
+          <div class="b-item b-item-winner">
+            <div class="b-item-top">
+              <span class="b-item-name">Taj Exotica ⭐</span>
+              <span class="b-badge">Winner</span>
+            </div>
+            <div class="b-item-price">₹12,000/night</div>
+          </div>
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">ITC Grand Goa</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 3</span>
+                <span class="b-vote-down">▼ 0</span>
+              </div>
+            </div>
+            <div class="b-item-price">₹6,200/night</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eat -->
+      <div class="board">
+        <div class="board-header">
+          <div class="board-icon" style="background: rgba(236, 72, 153, 0.2);">🍽️</div>
+          <div>
+            <div class="board-title">Eat</div>
+            <div class="board-sub">Where you dine</div>
+          </div>
+        </div>
+        <div class="board-items">
+          <div class="b-item b-item-winner">
+            <div class="b-item-top">
+              <span class="b-item-name">Thalassa Beach ⭐</span>
+              <span class="b-badge">Winner</span>
+            </div>
+            <div class="b-item-price">₹2,400/person</div>
+          </div>
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">Gunpowder</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 4</span>
+                <span class="b-vote-down">▼ 2</span>
+              </div>
+            </div>
+            <div class="b-item-price">₹900/person</div>
+          </div>
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">Fisherman's Wharf</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 3</span>
+                <span class="b-vote-down">▼ 1</span>
+              </div>
+            </div>
+            <div class="b-item-price">₹1,200/person</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visit -->
+      <div class="board">
+        <div class="board-header">
+          <div class="board-icon" style="background: rgba(16, 185, 129, 0.2);">🗺️</div>
+          <div>
+            <div class="board-title">Visit</div>
+            <div class="board-sub">Where you explore</div>
+          </div>
+        </div>
+        <div class="board-items">
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">Dudhsagar Falls</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 8</span>
+                <span class="b-vote-down">▼ 0</span>
+              </div>
+            </div>
+            <div class="b-item-price">Free</div>
+          </div>
+          <div class="b-item">
+            <div class="b-item-top">
+              <span class="b-item-name">Old Goa Churches</span>
+              <div class="b-item-votes">
+                <span class="b-vote-up">▲ 5</span>
+                <span class="b-vote-down">▼ 1</span>
+              </div>
+            </div>
+            <div class="b-item-price">Free</div>
+          </div>
+          <div class="b-item b-item-winner">
+            <div class="b-item-top">
+              <span class="b-item-name">Butterfly Beach ⭐</span>
+              <span class="b-badge">Winner</span>
+            </div>
+            <div class="b-item-price">₹500 ferry</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features-section">
+  <div class="section-eyebrow">Everything you need</div>
+  <h2 class="section-heading" style="margin-bottom: 48px">Built for<br /><em>groups.</em></h2>
+
+  <div class="features-grid">
+    <div class="feature-tile">
+      <span class="feature-emoji">⚡</span>
+      <div class="feature-title">Real-time voting</div>
+      <p class="feature-desc">See votes update live as your group weighs in. No refreshing, no waiting — instant consensus building.</p>
+    </div>
+    <div class="feature-tile">
+      <span class="feature-emoji">🔗</span>
+      <div class="feature-title">Share with a code</div>
+      <p class="feature-desc">7-character code. Anyone joins with just their name — no account, no password, no friction.</p>
+    </div>
+    <div class="feature-tile">
+      <span class="feature-emoji">🗓</span>
+      <div class="feature-title">Auto-build itinerary</div>
+      <p class="feature-desc">Finalize winners from each board and they snap into a day-by-day itinerary automatically.</p>
+    </div>
+    <div class="feature-tile">
+      <span class="feature-emoji">💰</span>
+      <div class="feature-title">Budget tracking</div>
+      <p class="feature-desc">See per-day and total trip cost estimates as you plan. Never get surprised by the final bill.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-title">Where are<br />you going?</h2>
+    <p class="cta-sub">Create your trip in under a minute and start planning with your group today.</p>
+    <a href="#" class="btn-white">Create a trip — it's free</a>
+    <p class="cta-note">No account · No credit card · Just a code</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">PackedUp<span class="footer-logo-dot"></span></div>
+  <div class="footer-copy">© 2025 PackedUp · Made for group travelers</div>
+</footer>
+
+</body>
+</html>

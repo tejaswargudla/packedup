@@ -2,21 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap');
-
 @layer base {
   :root {
-    --bg: #080e1a;
-    --surface: #0d1525;
-    --surface2: #111d30;
-    --gold: #c9a84c;
-    --gold2: #e8c97a;
-    --gold-dim: rgba(201,168,76,0.12);
-    --white: #e8eef8;
-    --muted: #3d5070;
-    --muted2: #567090;
-    --border: #162035;
-    --border2: #1e2e48;
+    --bg: #fffbf4;
+    --surface: #fff3e4;
+    --surface2: #ffe8cc;
+    --gold: #ff8c42;
+    --gold2: #e8732e;
+    --gold-dim: rgba(255,140,66,0.12);
+    --white: #1a1a2e;
+    --muted: #8a6e5a;
+    --muted2: #b89a82;
+    --border: #e8d5c0;
+    --border2: #d4b896;
   }
 
   * { box-sizing: border-box; }
@@ -24,15 +22,15 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--font-sans), 'Plus Jakarta Sans', sans-serif;
     background: var(--bg);
     color: var(--white);
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 300;
+    font-family: var(--font-serif), 'Playfair Display', Georgia, serif;
+    font-weight: 400;
   }
 
   /* scrollbar */
@@ -41,8 +39,8 @@
 }
 
 @layer utilities {
-  .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
-  .font-mono  { font-family: 'DM Mono', monospace; }
+  .font-serif { font-family: var(--font-serif), 'Playfair Display', Georgia, serif; }
+  .font-mono  { font-family: var(--font-mono), 'JetBrains Mono', monospace; }
 
   .text-gold  { color: var(--gold); }
   .text-muted { color: var(--muted); }
@@ -60,7 +58,7 @@
 
   /* mono label used everywhere */
   .mono-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -80,13 +78,13 @@
 
   /* btn gold */
   .btn-gold {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     padding: 14px 32px;
     background: var(--gold);
-    color: var(--bg);
+    color: #fff;
     border: none;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
@@ -96,13 +94,13 @@
   .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
 
   .btn-ghost {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     padding: 14px 32px;
     background: transparent;
-    color: var(--muted2);
+    color: var(--muted);
     border: 1px solid var(--border);
     cursor: pointer;
     transition: all 0.2s;
@@ -113,12 +111,12 @@
 
   /* input */
   .input-theme {
-    background: var(--surface);
+    background: var(--bg);
     border: 1px solid var(--border);
     padding: 13px 16px;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif), 'Playfair Display', serif;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     color: var(--white);
     outline: none;
     transition: border-color 0.2s;
@@ -137,33 +135,33 @@
 
   /* winner card */
   .card-winner {
-    border-color: rgba(201,168,76,0.3) !important;
-    background: linear-gradient(135deg, rgba(201,168,76,0.05), var(--surface));
+    border-color: rgba(255,140,66,0.3) !important;
+    background: linear-gradient(135deg, rgba(255,140,66,0.06), var(--surface));
   }
 
   /* badge */
   .badge-gold {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
     padding: 4px 10px;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(255,140,66,0.4);
     color: var(--gold);
-    background: rgba(201,168,76,0.08);
+    background: rgba(255,140,66,0.08);
   }
   .badge-green {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
     padding: 4px 10px;
-    border: 1px solid rgba(90,170,122,0.4);
-    color: #5aaa7a;
-    background: rgba(90,170,122,0.08);
+    border: 1px solid rgba(58,175,110,0.4);
+    color: #3aaf6e;
+    background: rgba(58,175,110,0.08);
   }
   .badge-muted {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -176,7 +174,7 @@
   .page-header {
     padding: 48px 56px 36px;
     border-bottom: 1px solid var(--border);
-    background: rgba(8,14,26,0.6);
+    background: rgba(255,251,244,0.6);
     backdrop-filter: blur(8px);
   }
 
@@ -193,5 +191,32 @@
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* tropical doodle animations */
+  @keyframes fernSway {
+    0%, 100% { transform: rotate(0deg); }
+    50%       { transform: rotate(4deg); }
+  }
+  @keyframes fernSway2 {
+    0%, 100% { transform: rotate(0deg) scaleX(-1); }
+    50%       { transform: rotate(-4deg) scaleX(-1); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  @keyframes umbrellaSway {
+    0%, 100% { transform: rotate(0deg); transform-origin: bottom center; }
+    50%       { transform: rotate(3deg); transform-origin: bottom center; }
+  }
+  @keyframes planeFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    33%       { transform: translateY(-10px) rotate(2deg); }
+    66%       { transform: translateY(5px) rotate(-1deg); }
+  }
+  @keyframes planeFloat2 {
+    0%, 100% { transform: translateY(0) rotate(15deg); }
+    50%       { transform: translateY(-12px) rotate(18deg); }
   }
 }

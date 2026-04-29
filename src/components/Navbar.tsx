@@ -17,7 +17,7 @@ export function Navbar({ tripName, tripMeta, members, onAdd, inviteCode }: Navba
   return (
     <header style={{
       height: '56px',
-      background: 'rgba(8,14,26,0.97)',
+      background: 'rgba(255,251,244,0.97)',
       borderBottom: '1px solid var(--border)',
       display: 'flex',
       alignItems: 'stretch',

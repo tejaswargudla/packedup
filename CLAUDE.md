@@ -72,7 +72,11 @@ Tables: `users`, `trips`, `trip_members`, `suggestions`, `votes`, `itinerary_ite
 
 ### Styling conventions
 
-- Dark theme: background `#080e1a`, surface `#0d1525`, gold accent `#c9a84c`
+- Light warm theme: background `#fffbf4` (cream), surface `#fff3e4`, orange accent `#ff8c42`, hover `#e8732e`
+- Text: `#1a1a2e` (dark), muted `#8a6e5a`, borders `#e8d5c0`
+- CSS variables: `--bg`, `--surface`, `--gold`, `--gold2`, `--white`, `--muted`, `--muted2`, `--border`, `--border2` — all defined in `globals.css`
 - Tailwind utility classes; merge with `cn()` from `@/lib/utils` (clsx + tailwind-merge)
-- Fonts: Cormorant Garamond (serif headings) + DM Mono (monospace)
+- Fonts: Playfair Display (serif headings, `--font-serif`) + Plus Jakarta Sans (body, `--font-sans`) + JetBrains Mono (labels/buttons, `--font-mono`) — loaded via `next/font/google` in `layout.tsx`
+- Modal/picker backdrops use `rgba(26,26,46,0.7)` (dark overlay on light pages); page surfaces use `rgba(255,251,244,0.*)` 
+- Buttons with gold background use white (`#fff`) text, not `var(--bg)`
 - Animations via Framer Motion

@@ -22,9 +22,9 @@ const inputStyle: React.CSSProperties = {
   background: 'var(--bg)',
   border: '1px solid var(--border)',
   padding: '11px 14px',
-  fontFamily: 'Cormorant Garamond, serif',
+  fontFamily: 'var(--font-serif)',
   fontSize: '15px',
-  fontWeight: 300,
+  fontWeight: 400,
   color: 'var(--white)',
   outline: 'none',
   width: '100%',
@@ -76,7 +76,7 @@ export function SuggestionModal({ tripId, memberId, defaultBoard, onClose }: Pro
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        style={{ position: 'fixed', inset: 0, background: 'rgba(8,14,26,0.85)', zIndex: 100, backdropFilter: 'blur(4px)' }}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(26,26,46,0.7)', zIndex: 100, backdropFilter: 'blur(4px)' }}
       />
 
       {/* CENTERED PANEL — flexbox wrapper handles position; Framer Motion handles y-slide */}
@@ -176,7 +176,7 @@ export function SuggestionModal({ tripId, memberId, defaultBoard, onClose }: Pro
           <button
             onClick={handleSubmit}
             disabled={isPending}
-            style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '14px', background: isPending ? 'rgba(201,168,76,0.5)' : 'var(--gold)', color: 'var(--bg)', border: 'none', cursor: isPending ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s' }}
+            style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '14px', background: isPending ? 'rgba(255,140,66,0.5)' : 'var(--gold)', color: '#fff', border: 'none', cursor: isPending ? 'not-allowed' : 'pointer', transition: 'opacity 0.2s' }}
           >
             {isPending ? 'Adding…' : 'Add Suggestion →'}
           </button>

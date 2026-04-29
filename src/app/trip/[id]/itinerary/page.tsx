@@ -14,7 +14,7 @@ const SECTIONS: { type: BoardType; emoji: string; label: string; full: string }[
   { type: 'visit', emoji: '📍', label: 'Visit', full: 'Places to Visit' },
 ]
 
-// shorthand so every inline style that needs DM Mono matches other pages
+// shorthand so every inline style that needs JetBrains Mono matches other pages
 const MONO = 'var(--font-mono)'
 
 // ── helpers ───────────────────────────────────────────────────
@@ -85,7 +85,7 @@ function Picker({ dayNumber, dayLabel, type, suggestions, placedIds, onAdd, onCl
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       onClick={onClose}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(8,14,26,0.88)', zIndex: 200, backdropFilter: 'blur(4px)' }} />
+      style={{ position: 'fixed', inset: 0, background: 'rgba(26,26,46,0.72)', zIndex: 200, backdropFilter: 'blur(4px)' }} />
 
     {/* wrapper — bottom sheet on mobile, centered dialog on desktop */}
     <div
@@ -94,7 +94,7 @@ function Picker({ dayNumber, dayLabel, type, suggestions, placedIds, onAdd, onCl
       <motion.div onClick={e => e.stopPropagation()}
         initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
         exit={{ y: 40, opacity: 0 }} transition={{ type: 'spring', stiffness: 340, damping: 30 }}
-        className="border border-[#1e2e48] border-b-0 md:border-b md:mx-4"
+        className="border border-border2 border-b-0 md:border-b md:mx-4"
         style={{ width: '100%', maxWidth: '520px', background: 'var(--surface)',
                  display: 'flex', flexDirection: 'column', maxHeight: '80vh', pointerEvents: 'auto' }}>
 
@@ -130,14 +130,14 @@ function Picker({ dayNumber, dayLabel, type, suggestions, placedIds, onAdd, onCl
                 style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)',
                          display: 'flex', alignItems: 'center', gap: '14px', minHeight: '52px',
                          cursor: added ? 'default' : 'pointer', opacity: added ? 0.4 : 1, transition: 'background 0.15s' }}
-                onMouseEnter={e => { if (!added) (e.currentTarget as HTMLDivElement).style.background = 'rgba(201,168,76,0.05)' }}
+                onMouseEnter={e => { if (!added) (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,140,66,0.05)' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent' }}>
                 <div style={{ fontFamily: MONO, fontSize: '11px',
                               color: voteScore(sug) > 0 ? '#5aaa7a' : 'var(--muted)', minWidth: '32px', textAlign: 'center' }}>
                   👍{sug.vote_count?.up ?? 0}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '14px', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {sug.name}
                   </div>
                   {(sug.price || sug.description) && (
@@ -232,8 +232,8 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
     <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg)' }}>
 
       {/* ── TOPBAR — matches board/created pages exactly ── */}
-      <header style={{ height: '56px', flexShrink: 0, background: 'rgba(8,14,26,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'stretch', position: 'sticky', top: 0, zIndex: 50, backdropFilter: 'blur(12px)' }}>
-        <div style={{ fontFamily: MONO, fontSize: '16px', fontWeight: 300, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)', padding: '0 28px', borderRight: '1px solid var(--border)', display: 'flex', alignItems: 'center' }}>
+      <header style={{ height: '56px', flexShrink: 0, background: 'rgba(255,251,244,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'stretch', position: 'sticky', top: 0, zIndex: 50, backdropFilter: 'blur(12px)' }}>
+        <div style={{ fontFamily: MONO, fontSize: '16px', fontWeight: 400, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)', padding: '0 28px', borderRight: '1px solid var(--border)', display: 'flex', alignItems: 'center' }}>
           PackedUp
         </div>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '0 24px', gap: '12px', overflow: 'hidden' }}>
@@ -262,7 +262,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
 
         {/* NAV SIDEBAR — desktop, same structure as board page */}
-        <aside className="hidden md:flex" style={{ width: '220px', flexShrink: 0, background: 'rgba(8,14,26,0.95)', borderRight: '1px solid var(--border)', flexDirection: 'column', backdropFilter: 'blur(12px)' }}>
+        <aside className="hidden md:flex" style={{ width: '220px', flexShrink: 0, background: 'rgba(255,251,244,0.95)', borderRight: '1px solid var(--border)', flexDirection: 'column', backdropFilter: 'blur(12px)' }}>
           <div style={{ padding: '24px 20px 12px', fontFamily: MONO, fontSize: '9px', letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--muted)' }}>Navigation</div>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px', padding: '0 12px' }}>
             {NAV.map(item => (
@@ -271,8 +271,8 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                          fontFamily: MONO, fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
                          cursor: 'pointer',
                          color: item.active ? 'var(--gold)' : 'var(--muted)',
-                         border: `1px solid ${item.active ? 'rgba(201,168,76,0.12)' : 'transparent'}`,
-                         background: item.active ? 'rgba(201,168,76,0.06)' : 'transparent',
+                         border: `1px solid ${item.active ? 'rgba(255,140,66,0.12)' : 'transparent'}`,
+                         background: item.active ? 'rgba(255,140,66,0.06)' : 'transparent',
                          transition: 'all 0.2s' }}>
                 <span style={{ fontSize: '14px', width: '18px', textAlign: 'center' }}>{item.icon}</span>
                 {item.label}
@@ -289,7 +289,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
               <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '4px' }}>Items Placed</div>
               <div style={{ fontFamily: MONO, fontSize: '16px', color: 'var(--white)' }}>{items.length}</div>
             </div>
-            <div style={{ border: `1px solid ${totalAmt > 0 ? 'rgba(201,168,76,0.2)' : 'var(--border)'}`, padding: '10px 12px', background: totalAmt > 0 ? 'rgba(201,168,76,0.05)' : 'transparent' }}>
+            <div style={{ border: `1px solid ${totalAmt > 0 ? 'rgba(255,140,66,0.2)' : 'var(--border)'}`, padding: '10px 12px', background: totalAmt > 0 ? 'rgba(255,140,66,0.05)' : 'transparent' }}>
               <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '4px' }}>Est. Total</div>
               <div style={{ fontFamily: MONO, fontSize: '16px', color: totalAmt > 0 ? 'var(--gold)' : 'var(--muted)' }}>
                 {fmtBudget(totalAmt, currency)}
@@ -335,7 +335,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                              padding: '13px 13px 13px 11px',
                              borderBottom: '1px solid var(--border)', cursor: 'pointer', gap: '8px',
                              borderLeft: `2px solid ${active ? 'var(--gold)' : 'transparent'}`,
-                             background: active ? 'rgba(201,168,76,0.06)' : 'transparent',
+                             background: active ? 'rgba(255,140,66,0.06)' : 'transparent',
                              transition: 'background 0.15s' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', minWidth: 0 }}>
                       <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--gold)' }}>Day {day.dayNumber}</span>
@@ -376,7 +376,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                     onClick={() => setSelectedDay(day.dayNumber)}
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
                              padding: '10px 14px', borderRight: '1px solid var(--border)', cursor: 'pointer', flexShrink: 0,
-                             background: active ? 'rgba(201,168,76,0.06)' : 'transparent',
+                             background: active ? 'rgba(255,140,66,0.06)' : 'transparent',
                              borderBottom: `2px solid ${active ? 'var(--gold)' : 'transparent'}`,
                              transition: 'all 0.15s', WebkitTapHighlightColor: 'transparent' as any }}>
                     <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--gold)' }}>Day {day.dayNumber}</span>
@@ -414,7 +414,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                   <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '6px' }}>
                     Day {currentDay.dayNumber} · {days.length} days total
                   </div>
-                  <h2 style={{ fontSize: '24px', fontWeight: 300, letterSpacing: '-0.5px', marginBottom: '8px' }}>
+                  <h2 style={{ fontSize: '24px', fontWeight: 400, letterSpacing: '-0.5px', marginBottom: '8px' }}>
                     {currentDay.label}
                   </h2>
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -448,7 +448,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                   return (
                     <div key={sec.type} style={{ border: '1px solid var(--border)' }}>
                       {/* section header */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 20px', borderBottom: secItems.length > 0 ? '1px solid var(--border)' : 'none', background: 'rgba(8,14,26,0.3)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 20px', borderBottom: secItems.length > 0 ? '1px solid var(--border)' : 'none', background: 'rgba(255,251,244,0.4)' }}>
                         <span style={{ fontSize: '14px' }}>{sec.emoji}</span>
                         <span style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--muted)' }}>{sec.full}</span>
                         {secItems.length > 0 && (
@@ -470,7 +470,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                             style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 20px', borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
                             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--gold)', flexShrink: 0 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontSize: '14px', fontWeight: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</div>
+                              <div style={{ fontSize: '14px', fontWeight: 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</div>
                               {(item as any).suggestion?.price && (
                                 <div style={{ fontFamily: MONO, fontSize: '10px', color: 'var(--muted)', marginTop: '2px', letterSpacing: '1px' }}>
                                   {(item as any).suggestion.price}
@@ -494,7 +494,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
                                  letterSpacing: '3px', textTransform: 'uppercase', cursor: 'pointer',
                                  textAlign: 'left', display: 'flex', alignItems: 'center', gap: '8px',
                                  minHeight: '44px', transition: 'all 0.2s', WebkitTapHighlightColor: 'transparent' as any }}
-                        onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.color = 'var(--gold)'; b.style.borderColor = 'rgba(201,168,76,0.4)' }}
+                        onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.color = 'var(--gold)'; b.style.borderColor = 'rgba(255,140,66,0.4)' }}
                         onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.color = 'var(--muted)'; b.style.borderColor = 'var(--border2)' }}>
                         + Add {sec.label}
                       </button>
@@ -504,7 +504,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
 
                 {/* day budget summary */}
                 {itemsForDay(currentDay.dayNumber).length > 0 && (
-                  <div style={{ border: '1px solid var(--border)', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(8,14,26,0.3)', flexWrap: 'wrap', gap: '16px' }}>
+                  <div style={{ border: '1px solid var(--border)', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,251,244,0.4)', flexWrap: 'wrap', gap: '16px' }}>
                     <div>
                       <div style={{ fontFamily: MONO, fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '4px' }}>
                         Day {currentDay.dayNumber} Total
@@ -540,7 +540,7 @@ export default function ItineraryPage({ params }: { params: { id: string } }) {
     </div>
 
     {/* BOTTOM NAV — mobile only, same style as other pages */}
-    <div className="flex md:hidden" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: 'rgba(8,14,26,0.98)', borderTop: '1px solid var(--border)', zIndex: 50, alignItems: 'stretch' }}>
+    <div className="flex md:hidden" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, height: '60px', background: 'rgba(255,251,244,0.98)', borderTop: '1px solid var(--border)', zIndex: 50, alignItems: 'stretch' }}>
       {NAV.map(item => (
         <div key={item.label} onClick={() => router.push(item.href)}
           style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', cursor: 'pointer',

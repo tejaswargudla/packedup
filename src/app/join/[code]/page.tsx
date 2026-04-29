@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
@@ -10,6 +10,7 @@ import { formatDateRange } from '@/lib/utils'
 export default function JoinPage({ params }: { params: { code: string } }) {
   const router = useRouter()
   const setGuestSession = useAppStore(s => s.setGuestSession)
+  const guestSession   = useAppStore(s => s.guestSession)
   const code = params.code.toUpperCase()
 
   const [name, setName]       = useState('')
@@ -23,6 +24,13 @@ export default function JoinPage({ params }: { params: { code: string } }) {
   })
 
   const trip = data?.trip
+
+  // If user already joined this trip, skip the form
+  useEffect(() => {
+    if (trip && guestSession?.trip_id === trip.id) {
+      router.replace(`/trip/${trip.id}`)
+    }
+  }, [trip, guestSession, router])
 
   async function handleJoin() {
     if (!name.trim()) { setError('Please enter your name'); return }
@@ -66,7 +74,7 @@ export default function JoinPage({ params }: { params: { code: string } }) {
       <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', padding: '32px' }}>
           <div style={{ fontSize: '40px', marginBottom: '20px' }}>✗</div>
-          <h1 style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '-0.5px', marginBottom: '10px' }}>Invalid invite code</h1>
+          <h1 style={{ fontSize: '28px', fontWeight: 400, letterSpacing: '-0.5px', marginBottom: '10px' }}>Invalid invite code</h1>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '32px' }}>
             Code <span style={{ color: 'var(--gold)' }}>{code}</span> was not found
           </p>
@@ -83,8 +91,8 @@ export default function JoinPage({ params }: { params: { code: string } }) {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
 
       {/* TOPBAR */}
-      <header style={{ height: '56px', background: 'rgba(8,14,26,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', padding: '0 28px', position: 'sticky', top: 0, zIndex: 50 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', fontWeight: 300, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)' }}>
+      <header style={{ height: '56px', background: 'rgba(255,251,244,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', padding: '0 28px', position: 'sticky', top: 0, zIndex: 50 }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', fontWeight: 400, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)' }}>
           PackedUp
         </span>
       </header>
@@ -110,7 +118,7 @@ export default function JoinPage({ params }: { params: { code: string } }) {
                 <span style={{ width: '20px', height: '1px', background: 'var(--gold)', display: 'inline-block' }} />
                 You&apos;re invited
               </div>
-              <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 300, lineHeight: 0.95, letterSpacing: '-1px', marginBottom: '12px' }}>
+              <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 400, lineHeight: 0.95, letterSpacing: '-1px', marginBottom: '12px' }}>
                 {trip.name}
               </h1>
               <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
@@ -136,7 +144,7 @@ export default function JoinPage({ params }: { params: { code: string } }) {
                 onChange={e => setName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleJoin()}
                 placeholder="So the group knows who you are"
-                style={{ background: 'var(--bg)', border: '1px solid var(--border)', padding: '12px 14px', fontFamily: 'Cormorant Garamond, serif', fontSize: '16px', fontWeight: 300, color: 'var(--white)', outline: 'none', width: '100%', transition: 'border-color 0.2s' }}
+                style={{ background: 'var(--bg)', border: '1px solid var(--border)', padding: '12px 14px', fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 400, color: 'var(--white)', outline: 'none', width: '100%', transition: 'border-color 0.2s' }}
                 onFocus={e => (e.target.style.borderColor = 'var(--gold)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')}
               />
@@ -151,7 +159,7 @@ export default function JoinPage({ params }: { params: { code: string } }) {
             <button
               onClick={handleJoin}
               disabled={loading || !name.trim()}
-              style={{ width: '100%', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '15px', background: loading || !name.trim() ? 'rgba(201,168,76,0.4)' : 'var(--gold)', color: 'var(--bg)', border: 'none', cursor: loading || !name.trim() ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
+              style={{ width: '100%', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '15px', background: loading || !name.trim() ? 'rgba(255,140,66,0.4)' : 'var(--gold)', color: 'var(--bg)', border: 'none', cursor: loading || !name.trim() ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
             >
               {loading ? 'Joining…' : 'Join Trip →'}
             </button>

@@ -48,8 +48,8 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
 
       {/* TOPBAR */}
-      <header style={{ height: '56px', background: 'rgba(8,14,26,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'stretch', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', fontWeight: 300, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)', padding: '0 28px', borderRight: '1px solid var(--border)', display: 'flex', alignItems: 'center' }}>
+      <header style={{ height: '56px', background: 'rgba(255,251,244,0.97)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'stretch', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', fontWeight: 400, letterSpacing: '6px', textTransform: 'uppercase', color: 'var(--gold)', padding: '0 28px', borderRight: '1px solid var(--border)', display: 'flex', alignItems: 'center' }}>
           PackedUp
         </div>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', padding: '0 24px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--muted)' }}>
@@ -57,7 +57,7 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
         </div>
         <button
           onClick={() => router.push(`/trip/${params.id}`)}
-          style={{ height: '100%', padding: '0 28px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--bg)', background: 'var(--gold)', border: 'none', cursor: 'pointer' }}
+          style={{ height: '100%', padding: '0 28px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', textTransform: 'uppercase', color: '#fff', background: 'var(--gold)', border: 'none', cursor: 'pointer' }}
         >
           Enter Trip →
         </button>
@@ -75,10 +75,10 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
           <span style={{ width: '28px', height: '1px', background: 'var(--gold)', display: 'inline-block' }} />
         </div>
 
-        <h1 style={{ fontSize: 'clamp(36px,5vw,72px)', fontWeight: 300, lineHeight: 0.9, letterSpacing: '-2px', textAlign: 'center', marginBottom: '12px' }}>
+        <h1 style={{ fontSize: 'clamp(36px,5vw,72px)', fontWeight: 400, lineHeight: 0.9, letterSpacing: '-2px', textAlign: 'center', marginBottom: '12px' }}>
           <em style={{ color: 'var(--gold)' }}>{trip.name}</em>
         </h1>
-        <p style={{ fontSize: '16px', fontWeight: 300, fontStyle: 'italic', color: 'var(--muted)', marginBottom: '64px' }}>
+        <p style={{ fontSize: '16px', fontWeight: 400, fontStyle: 'italic', color: 'var(--muted)', marginBottom: '64px' }}>
           {trip.destination}
         </p>
 
@@ -98,7 +98,7 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
             </span>
             <button
               onClick={copyCode}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', padding: '10px 18px', background: codeCopied ? 'rgba(201,168,76,0.12)' : 'transparent', border: '1px solid var(--border)', color: codeCopied ? 'var(--gold)' : 'var(--muted)', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', padding: '10px 18px', background: codeCopied ? 'rgba(255,140,66,0.12)' : 'transparent', border: '1px solid var(--border)', color: codeCopied ? 'var(--gold)' : 'var(--muted)', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
             >
               {codeCopied ? 'Copied ✓' : 'Copy Code'}
             </button>
@@ -113,12 +113,12 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
             </span>
           </div>
           <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(232,238,248,0.4)', letterSpacing: '0.5px', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(26,26,46,0.45)', letterSpacing: '0.5px', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {joinUrl}
             </span>
             <button
               onClick={copyLink}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', padding: '10px 18px', background: linkCopied ? 'rgba(201,168,76,0.12)' : 'transparent', border: '1px solid var(--border)', color: linkCopied ? 'var(--gold)' : 'var(--muted)', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', padding: '10px 18px', background: linkCopied ? 'rgba(255,140,66,0.12)' : 'transparent', border: '1px solid var(--border)', color: linkCopied ? 'var(--gold)' : 'var(--muted)', cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0 }}
             >
               {linkCopied ? 'Copied ✓' : 'Copy Link'}
             </button>
@@ -128,14 +128,14 @@ export default function TripCreatedPage({ params }: { params: { id: string } }) 
         {/* NOTE */}
         <div style={{ width: '100%', maxWidth: '520px', display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '48px' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--gold)', marginTop: '2px' }}>—</span>
-          <p style={{ fontSize: '13px', fontWeight: 300, color: 'rgba(232,238,248,0.35)', lineHeight: 1.8, fontStyle: 'italic' }}>
+          <p style={{ fontSize: '13px', fontWeight: 400, color: 'rgba(26,26,46,0.4)', lineHeight: 1.8, fontStyle: 'italic' }}>
             Friends join with just their name — no account required. Share the code or link above and start planning together.
           </p>
         </div>
 
         <button
           onClick={() => router.push(`/trip/${params.id}`)}
-          style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '16px 48px', background: 'var(--gold)', color: 'var(--bg)', border: 'none', cursor: 'pointer' }}
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '16px 48px', background: 'var(--gold)', color: '#fff', border: 'none', cursor: 'pointer' }}
         >
           Enter Trip Dashboard →
         </button>

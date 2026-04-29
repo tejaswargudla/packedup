@@ -48,6 +48,12 @@ export const membersApi = {
 
   list: (tripId: string) =>
     req<{ members: TripMember[] }>(`/members?trip_id=${tripId}`),
+
+  remove: (memberId: string, requesterMemberId: string) =>
+    req<{ success: boolean }>(`/members/${memberId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({ requester_member_id: requesterMemberId }),
+    }),
 }
 
 // ─── Suggestions ─────────────────────────────────────────────

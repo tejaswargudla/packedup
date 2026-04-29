@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PackedUp — Your Next Trip Starts Here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;900&family=Nunito:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sky:    #e8f4f8;
+  --ocean:  #006d77;
+  --ocean2: #00857a;
+  --sun:    #f4a226;
+  --sand:   #fdf6e3;
+  --coral:  #ff6b6b;
+  --leaf:   #2d6a4f;
+  --text:   #1a2e2b;
+  --muted:  rgba(26,46,43,0.5);
+  --border: rgba(0,109,119,0.15);
+  --white:  #ffffff;
+  --font-display: 'Unbounded', sans-serif;
+  --font-body:    'Nunito', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--sand);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* ── GLOBAL BG BLOBS ── */
+.blob-wrap {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+}
+.blob-1 { width: 600px; height: 600px; background: var(--ocean); top: -200px; right: -100px; }
+.blob-2 { width: 400px; height: 400px; background: var(--sun); bottom: 100px; left: -100px; }
+.blob-3 { width: 300px; height: 300px; background: var(--coral); top: 60%; right: 10%; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(253,246,227,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 70px;
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 700;
+  color: var(--ocean);
+  letter-spacing: -1px;
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--ocean);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ocean); }
+.nav-btn {
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.5px; padding: 12px 28px;
+  background: var(--ocean); color: var(--white);
+  border: none; border-radius: 50px; cursor: pointer;
+  text-decoration: none; transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--ocean2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,109,119,0.35); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 92vh;
+  display: flex; align-items: center;
+  padding: 80px 48px 60px;
+  max-width: 1300px; margin: 0 auto;
+  gap: 60px;
+  position: relative; z-index: 1;
+}
+.hero-left { flex: 1; }
+.hero-right { flex: 1; display: flex; justify-content: flex-end; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ocean);
+  background: rgba(0,109,119,0.08); border: 1px solid rgba(0,109,119,0.2);
+  padding: 8px 18px; border-radius: 50px; margin-bottom: 28px;
+}
+.eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sun); }
+
+h1.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 80px);
+  font-weight: 900; line-height: 1.05; letter-spacing: -3px;
+  color: var(--text); margin-bottom: 24px;
+}
+h1.hero-title .sun { color: var(--sun); }
+h1.hero-title .ocean { color: var(--ocean); }
+
+.hero-sub {
+  font-size: 17px; font-weight: 300; color: var(--muted);
+  line-height: 1.8; max-width: 480px; margin-bottom: 40px;
+}
+
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+.btn-main {
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.5px; padding: 18px 40px;
+  background: var(--sun); color: var(--text);
+  border: none; border-radius: 50px; cursor: pointer;
+  text-decoration: none; transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-main:hover { background: #f5b040; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,162,38,0.4); }
+
+.btn-ghost {
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  padding: 18px 32px; background: transparent; color: var(--ocean);
+  border: 2px solid rgba(0,109,119,0.25); border-radius: 50px;
+  cursor: pointer; text-decoration: none; transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--ocean); background: rgba(0,109,119,0.06); }
+
+/* ── HERO VISUAL ── */
+.hero-visual {
+  width: 420px; position: relative;
+}
+.main-card {
+  background: var(--white);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,109,119,0.18), 0 8px 24px rgba(0,0,0,0.08);
+}
+.card-photo {
+  height: 220px;
+  background: linear-gradient(160deg, #48cae4 0%, #0096c7 40%, #006d77 80%, #2d6a4f 100%);
+  position: relative; display: flex; align-items: flex-end; padding: 20px;
+  font-size: 52px;
+}
+.card-photo-label {
+  position: absolute; bottom: 16px; left: 16px;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(8px);
+  padding: 6px 14px; border-radius: 50px;
+  font-family: var(--font-mono); font-size: 11px; color: #fff;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.card-body { padding: 20px 24px; }
+.card-trip-name {
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  color: var(--text); letter-spacing: -1px; margin-bottom: 4px;
+}
+.card-trip-meta {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px;
+}
+.card-code-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  padding: 12px 14px;
+  background: rgba(0,109,119,0.06); border: 1px solid rgba(0,109,119,0.15);
+  border-radius: 10px;
+}
+.card-code-label {
+  font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.card-code-val {
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+  letter-spacing: 4px; color: var(--ocean); margin-left: auto;
+}
+.card-members {
+  display: flex; align-items: center; gap: 10px; padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.avatars { display: flex; }
+.av {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 11px; font-weight: 700; color: #fff;
+  margin-left: -8px;
+}
+.av:first-child { margin-left: 0; }
+.av-label { font-family: var(--font-body); font-size: 12px; color: var(--muted); font-weight: 500; }
+
+/* floating badges */
+.float-badge {
+  position: absolute;
+  background: var(--white); border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  padding: 10px 16px;
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap; color: var(--text);
+  animation: float 3s ease-in-out infinite;
+}
+.float-badge .emoji { font-size: 18px; }
+.badge-votes { top: 60px; right: -40px; }
+.badge-join  { bottom: 100px; left: -50px; animation-delay: 1.5s; }
+.badge-itinerary { bottom: 30px; right: -20px; animation-delay: 0.8s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ── TRUST BAR ── */
+.trust-bar {
+  background: var(--ocean);
+  padding: 20px 48px;
+  display: flex; align-items: center; justify-content: center; gap: 64px;
+  position: relative; z-index: 1; overflow: hidden;
+}
+.trust-bar::after {
+  content: '☀️🏄🌊🗺️🍹🏖️☀️🏄🌊🗺️🍹🏖️';
+  position: absolute; font-size: 80px; opacity: 0.04; letter-spacing: 10px;
+  pointer-events: none; white-space: nowrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.65);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.trust-item .t-num {
+  font-family: var(--font-display); font-size: 28px; font-weight: 700;
+  color: var(--sun); line-height: 1;
+}
+
+/* ── HOW IT WORKS ── */
+.section { padding: 100px 48px; max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
+.section-tag {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ocean); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-tag::before { content: ''; display: inline-block; width: 28px; height: 2px; background: var(--sun); border-radius: 1px; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 60px); font-weight: 900;
+  letter-spacing: -2.5px; line-height: 1.0; color: var(--text); margin-bottom: 60px;
+}
+.section-title .accent { color: var(--ocean); }
+
+.steps-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.step-card {
+  background: var(--white); border-radius: 20px;
+  padding: 36px 32px;
+  border: 1px solid var(--border);
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative; overflow: hidden;
+}
+.step-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  border-radius: 0; transition: all 0.3s;
+}
+.step-card:nth-child(1)::before { background: var(--sun); }
+.step-card:nth-child(2)::before { background: var(--coral); }
+.step-card:nth-child(3)::before { background: var(--ocean); }
+.step-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,109,119,0.14); }
+
+.step-no {
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; color: var(--muted); margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.step-emoji { font-size: 44px; margin-bottom: 16px; display: block; line-height: 1; }
+.step-title {
+  font-family: var(--font-display); font-size: 22px; font-weight: 700;
+  letter-spacing: -0.5px; color: var(--text); margin-bottom: 10px;
+}
+.step-desc { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+
+/* ── BOARDS ── */
+.boards-wrap {
+  background: linear-gradient(160deg, #006d77 0%, #004e5a 50%, #003744 100%);
+  padding: 100px 48px;
+  position: relative; overflow: hidden; z-index: 1;
+}
+.boards-deco-sun {
+  position: absolute; top: -80px; right: -80px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,162,38,0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+.boards-deco-wave {
+  position: absolute; bottom: -60px; left: -40px;
+  width: 500px; height: 200px;
+  background: radial-gradient(ellipse, rgba(255,107,107,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.boards-inner { max-width: 1300px; margin: 0 auto; position: relative; z-index: 1; }
+.boards-tag {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(244,162,38,0.8); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.boards-tag::before { content: ''; display: inline-block; width: 28px; height: 2px; background: var(--sun); border-radius: 1px; }
+.boards-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 60px); font-weight: 900;
+  letter-spacing: -2.5px; line-height: 1.0; color: #fff; margin-bottom: 60px;
+}
+.boards-title .sun { color: var(--sun); }
+
+.boards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.board-col {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px; overflow: hidden;
+  transition: transform 0.25s;
+}
+.board-col:hover { transform: translateY(-4px); }
+.board-head {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; gap: 12px;
+}
+.board-icon-circle {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.board-head-title {
+  font-family: var(--font-display); font-size: 18px; font-weight: 700;
+  color: #fff; letter-spacing: -0.5px;
+}
+.board-head-sub {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 1px;
+}
+.board-cards { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.bc {
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; cursor: pointer;
+  transition: background 0.2s;
+}
+.bc:hover { background: rgba(255,255,255,0.12); }
+.bc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; }
+.bc-name { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+.bc-votes { font-family: var(--font-mono); font-size: 11px; display: flex; gap: 6px; }
+.vup { color: #6ee7b7; } .vdn { color: #fca5a5; }
+.bc-price { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
+.bc-winner {
+  background: rgba(244,162,38,0.15) !important;
+  border-color: rgba(244,162,38,0.4) !important;
+}
+.bc-win-badge {
+  font-family: var(--font-display); font-size: 9px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 50px;
+  background: var(--sun); color: var(--text);
+}
+
+/* ── FEATURES STRIP ── */
+.features-strip {
+  padding: 80px 48px;
+  max-width: 1300px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.feat-tile {
+  background: var(--white);
+  border-radius: 20px; padding: 32px 28px;
+  border: 1px solid var(--border);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.feat-tile:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,109,119,0.12); }
+.feat-emoji { font-size: 36px; margin-bottom: 16px; display: block; }
+.feat-title {
+  font-family: var(--font-display); font-size: 17px; font-weight: 700;
+  letter-spacing: -0.5px; color: var(--text); margin-bottom: 8px;
+}
+.feat-desc { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; }
+
+/* ── CTA ── */
+.cta-wrap {
+  padding: 80px 48px 100px;
+  position: relative; z-index: 1;
+}
+.cta-box {
+  max-width: 900px; margin: 0 auto;
+  background: linear-gradient(135deg, var(--sun) 0%, #f4722a 50%, var(--coral) 100%);
+  border-radius: 32px; padding: 80px 64px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: '🌴🌊☀️🏄🌴🌊☀️🏄';
+  position: absolute; bottom: -10px; left: 0; right: 0;
+  font-size: 60px; letter-spacing: 8px; opacity: 0.12; pointer-events: none;
+}
+.cta-title {
+  font-family: var(--font-display); font-size: clamp(42px, 6vw, 72px);
+  font-weight: 900; letter-spacing: -3px; line-height: 0.95;
+  color: #fff; margin-bottom: 20px;
+}
+.cta-sub {
+  font-family: var(--font-body); font-size: 17px; font-weight: 300;
+  color: rgba(255,255,255,0.75); margin-bottom: 44px; line-height: 1.7; max-width: 480px; margin-inline: auto; margin-bottom: 40px;
+}
+.btn-white-cta {
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.5px; padding: 20px 56px;
+  background: #fff; color: var(--ocean);
+  border: none; border-radius: 50px; cursor: pointer;
+  text-decoration: none; transition: all 0.2s; display: inline-block;
+}
+.btn-white-cta:hover { background: var(--ocean); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.cta-note {
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(255,255,255,0.5); margin-top: 20px; letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--text); padding: 36px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo {
+  font-family: var(--font-display); font-size: 20px; font-weight: 700;
+  color: var(--sun); letter-spacing: -1px;
+}
+.footer-copy { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { flex-direction: column; padding: 60px 20px 40px; }
+  .hero-right { display: none; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .boards-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .trust-bar { flex-direction: column; gap: 24px; padding: 32px 20px; }
+  .section, .boards-wrap, .features-strip, .cta-wrap { padding: 60px 20px; }
+  .cta-box { padding: 48px 28px; }
+  footer { flex-direction: column; gap: 12px; padding: 28px 20px; }
+}
+@media (max-width: 600px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="blob-wrap">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">✈️</div>
+    PackedUp
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">How it works</a></li>
+    <li><a href="#">Features</a></li>
+  </ul>
+  <a href="#" class="nav-btn">Plan a trip →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">
+      <span class="eyebrow-dot"></span>
+      Group trip planning made easy
+    </div>
+    <h1 class="hero-title">
+      Plan the trip<br />your whole<br /><span class="sun">group</span> will<br /><span class="ocean">love.</span>
+    </h1>
+    <p class="hero-sub">
+      Create a trip, drop a 7-character code, and let everyone vote on where to stay, eat, and explore. No accounts needed.
+    </p>
+    <div class="hero-btns">
+      <a href="#" class="btn-main">🌴 Create a Trip</a>
+      <a href="#" class="btn-ghost">I have a code →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="main-card">
+        <div class="card-photo">
+          🌊
+          <div class="card-photo-label">📍 Goa, India</div>
+        </div>
+        <div class="card-body">
+          <div class="card-trip-name">Goa 2025 🏖️</div>
+          <div class="card-trip-meta">Dec 23 – Dec 28 · 5 nights</div>
+          <div class="card-code-row">
+            <div>
+              <div class="card-code-label">Invite Code</div>
+            </div>
+            <div class="card-code-val">XK7P2QA</div>
+          </div>
+          <div class="card-members">
+            <div class="avatars">
+              <div class="av" style="background:#006d77">T</div>
+              <div class="av" style="background:#f4a226">A</div>
+              <div class="av" style="background:#ff6b6b">R</div>
+              <div class="av" style="background:#2d6a4f">S</div>
+              <div class="av" style="background:#0096c7; font-size:9px">+3</div>
+            </div>
+            <span class="av-label">7 planning together</span>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge badge-votes">
+        <span class="emoji">🗳️</span> Live voting · 12 votes
+      </div>
+      <div class="float-badge badge-join">
+        <span class="emoji">👋</span> Sara just joined!
+      </div>
+      <div class="float-badge badge-itinerary">
+        <span class="emoji">📋</span> Itinerary ready
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <span class="t-num">0</span>
+    accounts needed
+  </div>
+  <div class="trust-item">
+    <span class="t-num">7</span>
+    character invite code
+  </div>
+  <div class="trust-item">
+    <span class="t-num">3</span>
+    planning boards
+  </div>
+  <div class="trust-item">
+    <span class="t-num">∞</span>
+    group members
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-tag">How it works</div>
+  <h2 class="section-title">Three steps to<br />your <span class="accent">dream trip.</span></h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-no">Step 01</div>
+      <span class="step-emoji">✈️</span>
+      <div class="step-title">Create a trip</div>
+      <p class="step-desc">Enter your destination, dates, and name. Get an instant 7-character invite code and shareable link — takes under 30 seconds.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-no">Step 02</div>
+      <span class="step-emoji">📲</span>
+      <div class="step-title">Invite the crew</div>
+      <p class="step-desc">Share the code or link. Friends join with just their name — no sign-up, no app download, no friction.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-no">Step 03</div>
+      <span class="step-emoji">🗺️</span>
+      <div class="step-title">Plan together</div>
+      <p class="step-desc">Everyone suggests places to stay, eat, and visit. Vote in real-time and finalize an itinerary everyone agrees on.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOARDS -->
+<section class="boards-wrap">
+  <div class="boards-deco-sun"></div>
+  <div class="boards-deco-wave"></div>
+  <div class="boards-inner">
+    <div class="boards-tag">The boards</div>
+    <h2 class="boards-title">Stay. Eat.<br /><span class="sun">Visit.</span></h2>
+    <div class="boards-grid">
+      <!-- Stay -->
+      <div class="board-col">
+        <div class="board-head">
+          <div class="board-icon-circle" style="background:rgba(129,140,248,0.2)">🏨</div>
+          <div>
+            <div class="board-head-title">Stay</div>
+            <div class="board-head-sub">Where you sleep</div>
+          </div>
+        </div>
+        <div class="board-cards">
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">The Leela Palace</span>
+              <div class="bc-votes"><span class="vup">▲5</span><span class="vdn">▼1</span></div>
+            </div>
+            <span class="bc-price">₹8,500/night</span>
+          </div>
+          <div class="bc bc-winner">
+            <div class="bc-top">
+              <span class="bc-name">Taj Exotica ⭐</span>
+              <span class="bc-win-badge">Winner</span>
+            </div>
+            <span class="bc-price">₹12,000/night</span>
+          </div>
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">ITC Grand Goa</span>
+              <div class="bc-votes"><span class="vup">▲3</span><span class="vdn">▼0</span></div>
+            </div>
+            <span class="bc-price">₹6,200/night</span>
+          </div>
+        </div>
+      </div>
+      <!-- Eat -->
+      <div class="board-col">
+        <div class="board-head">
+          <div class="board-icon-circle" style="background:rgba(252,165,165,0.2)">🍽️</div>
+          <div>
+            <div class="board-head-title">Eat</div>
+            <div class="board-head-sub">Where you dine</div>
+          </div>
+        </div>
+        <div class="board-cards">
+          <div class="bc bc-winner">
+            <div class="bc-top">
+              <span class="bc-name">Thalassa Beach ⭐</span>
+              <span class="bc-win-badge">Winner</span>
+            </div>
+            <span class="bc-price">₹2,400/person</span>
+          </div>
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">Gunpowder</span>
+              <div class="bc-votes"><span class="vup">▲4</span><span class="vdn">▼2</span></div>
+            </div>
+            <span class="bc-price">₹900/person</span>
+          </div>
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">Fisherman's Wharf</span>
+              <div class="bc-votes"><span class="vup">▲3</span><span class="vdn">▼1</span></div>
+            </div>
+            <span class="bc-price">₹1,200/person</span>
+          </div>
+        </div>
+      </div>
+      <!-- Visit -->
+      <div class="board-col">
+        <div class="board-head">
+          <div class="board-icon-circle" style="background:rgba(110,231,183,0.2)">🗺️</div>
+          <div>
+            <div class="board-head-title">Visit</div>
+            <div class="board-head-sub">Where you explore</div>
+          </div>
+        </div>
+        <div class="board-cards">
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">Dudhsagar Falls</span>
+              <div class="bc-votes"><span class="vup">▲8</span><span class="vdn">▼0</span></div>
+            </div>
+            <span class="bc-price">Free</span>
+          </div>
+          <div class="bc bc-winner">
+            <div class="bc-top">
+              <span class="bc-name">Butterfly Beach ⭐</span>
+              <span class="bc-win-badge">Winner</span>
+            </div>
+            <span class="bc-price">₹500 ferry</span>
+          </div>
+          <div class="bc">
+            <div class="bc-top">
+              <span class="bc-name">Old Goa Churches</span>
+              <div class="bc-votes"><span class="vup">▲5</span><span class="vdn">▼1</span></div>
+            </div>
+            <span class="bc-price">Free</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<div class="features-strip">
+  <div class="section-tag">Everything included</div>
+  <h2 class="section-title" style="margin-bottom:40px">Built for<br /><span class="accent">real trips.</span></h2>
+  <div class="features-grid">
+    <div class="feat-tile">
+      <span class="feat-emoji">⚡</span>
+      <div class="feat-title">Live voting</div>
+      <p class="feat-desc">See votes update in real-time as your crew weighs in. No page refreshes needed.</p>
+    </div>
+    <div class="feat-tile">
+      <span class="feat-emoji">🔗</span>
+      <div class="feat-title">Just a code</div>
+      <p class="feat-desc">Anyone joins with a 7-character code and their name. Zero sign-up friction.</p>
+    </div>
+    <div class="feat-tile">
+      <span class="feat-emoji">🗓</span>
+      <div class="feat-title">Auto itinerary</div>
+      <p class="feat-desc">Winners from each board snap into a day-by-day plan automatically.</p>
+    </div>
+    <div class="feat-tile">
+      <span class="feat-emoji">💰</span>
+      <div class="feat-title">Budget tracker</div>
+      <p class="feat-desc">Per-day and total cost estimates so your group always knows what it'll cost.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <h2 class="cta-title">Where are<br />you headed?</h2>
+    <p class="cta-sub">Create your trip in 30 seconds. Share a code. Start planning with your crew today.</p>
+    <a href="#" class="btn-white-cta">Create a trip — it's free 🌴</a>
+    <p class="cta-note">No account · No credit card · Just a code</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">PackedUp ✈️</div>
+  <div class="footer-copy">© 2025 PackedUp · Made for group travelers</div>
+</footer>
+
+</body>
+</html>
