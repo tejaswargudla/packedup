@@ -2,17 +2,49 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useWebMCP } from 'use-webmcp-tool'
 import { tripsApi } from '@/lib/api'
+import { useAppStore } from '@/lib/store'
 import s from './page.module.css'
 
 export default function HomePage() {
   const router = useRouter()
+  const setGuestSession = useAppStore(state => state.setGuestSession)
   const [code, setCode]       = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
   const [iwCode, setIwCode]   = useState('')
   const [iwLoading, setIwLoading] = useState(false)
   const [iwError, setIwError] = useState('')
+
+  // Lets an AI agent create a trip straight from the landing page without
+  // clicking through to /create — see https://developer.chrome.com/docs/ai/webmcp
+  useWebMCP({
+    name: 'create_trip',
+    description:
+      "Create a new PackedUp trip with a name, destination, date range, and the creator's display name, then navigate to the trip's invite page.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Trip name, e.g. "Goa 2025"' },
+        destination: { type: 'string', description: 'Destination city/country, e.g. "Goa, India"' },
+        start_date: { type: 'string', description: 'Trip start date, formatted YYYY-MM-DD' },
+        end_date: { type: 'string', description: 'Trip end date, formatted YYYY-MM-DD' },
+        creator_name: { type: 'string', description: "Display name of the person creating the trip" },
+      },
+      required: ['name', 'destination', 'start_date', 'end_date', 'creator_name'],
+    },
+    annotations: { readOnlyHint: false },
+    async execute(args: { name: string; destination: string; start_date: string; end_date: string; creator_name: string }) {
+      const { trip, member, session_token } = await tripsApi.create(args)
+      if (session_token) {
+        setGuestSession({ member_id: member.id, trip_id: trip.id, display_name: member.display_name, session_token })
+      }
+      router.push(`/trip/${trip.id}/created`)
+      const inviteLink = typeof window !== 'undefined' ? `${window.location.origin}/join/${trip.invite_code}` : trip.invite_code
+      return `Created trip "${trip.name}" to ${trip.destination} (${trip.start_date} → ${trip.end_date}). Invite code: ${trip.invite_code}. Invite link: ${inviteLink}`
+    },
+  })
 
   async function handleJoin(inviteCode: string) {
     const c = inviteCode.trim().toUpperCase()
@@ -454,6 +486,68 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── AGENT TOOLS ── */}
+      <section className={s.agentSection} id="agents">
+        <div className={s.agentInner}>
+          <div className={s.agentText}>
+            <div className={s.sectionTag}>Agent tools</div>
+            <h2 className={s.agentHeading}>Agents<br /><em>can plan too.</em></h2>
+            <p className={s.agentDesc}>
+              PackedUp exposes a few tools over WebMCP, an emerging browser standard for AI agents.
+              Point a WebMCP-aware agent at this page and it can create a trip the same way a person
+              would — just faster. Inside a trip, it can also read the boards and drop in a
+              recommended stay, meal, or sight.
+            </p>
+            <div className={s.agentChips}>
+              {[
+                { name: 'create_trip', desc: 'Fills in the trip form and returns an invite code.' },
+                { name: 'get_trip_board_info', desc: 'Reads what’s already suggested, so it doesn’t repeat itself.' },
+                { name: 'add_recommended_suggestion', desc: 'Adds one recommended place to Stay, Eat, or Visit.' },
+              ].map(tool => (
+                <div key={tool.name} className={s.agentChip}>
+                  <span className={s.agentChipName}>{tool.name}</span>
+                  <span className={s.agentChipDesc}>{tool.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={s.agentTerminal}>
+            <div className={s.agentTerminalHead}>
+              <span className={s.dotRed} /><span className={s.dotYellow} /><span className={s.dotGreen} />
+            </div>
+            <div className={s.agentTerminalBody}>
+              <div className={s.tLine}>
+                <span className={s.tCall}>agent.call</span>(<span className={s.tStr}>&quot;create_trip&quot;</span>, {'{'}
+              </div>
+              <div className={s.tLine} style={{ paddingLeft: 20 }}>
+                <span className={s.tKey}>name:</span> <span className={s.tStr}>&quot;Kyoto Autumn&quot;</span>,
+              </div>
+              <div className={s.tLine} style={{ paddingLeft: 20 }}>
+                <span className={s.tKey}>destination:</span> <span className={s.tStr}>&quot;Kyoto, Japan&quot;</span>,
+              </div>
+              <div className={s.tLine} style={{ paddingLeft: 20 }}>
+                <span className={s.tKey}>start_date:</span> <span className={s.tStr}>&quot;2026-11-02&quot;</span>,
+              </div>
+              <div className={s.tLine} style={{ paddingLeft: 20 }}>
+                <span className={s.tKey}>end_date:</span> <span className={s.tStr}>&quot;2026-11-09&quot;</span>,
+              </div>
+              <div className={s.tLine} style={{ paddingLeft: 20 }}>
+                <span className={s.tKey}>creator_name:</span> <span className={s.tStr}>&quot;Jordan&quot;</span>,
+              </div>
+              <div className={s.tLine}>{'}'})</div>
+              <div className={s.tOk}>✓ Trip created — invite code MR4XW9B</div>
+            </div>
+            <p className={s.agentNote}>
+              Chrome ships WebMCP behind a flag today. Inspect live registered tools with the{' '}
+              <a href="https://chromewebstore.google.com/detail/webmcp-inspector/ddmnodehiebeklbngpeeghmcohomfimd" target="_blank" rel="noopener noreferrer">
+                WebMCP Inspector
+              </a> extension.
+            </p>
           </div>
         </div>
       </section>

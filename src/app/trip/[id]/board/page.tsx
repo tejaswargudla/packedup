@@ -256,10 +256,7 @@ export default function BoardPage({ params }: { params: { id: string } }) {
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', padding: '80px 0' }}>
                 <div style={{ fontSize: '40px', marginBottom: '16px' }}>{board.emoji}</div>
                 <h2 style={{ fontSize: '28px', fontWeight: 400, letterSpacing: '-0.5px', marginBottom: '8px' }}>No suggestions yet</h2>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '32px' }}>Be the first to suggest a place</p>
-                <button onClick={() => setModalOpen(true)} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '14px 36px', background: 'var(--gold)', color: '#fff', border: 'none', cursor: 'pointer' }}>
-                  + Add Suggestion
-                </button>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--muted)', textTransform: 'uppercase' }}>Be the first to suggest a place</p>
               </motion.div>
             )}
 
