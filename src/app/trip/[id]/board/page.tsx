@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useWebMCP } from 'use-webmcp-tool'
 import { tripsApi, suggestionsApi, votesApi } from '@/lib/api'
 import { useAppStore } from '@/lib/store'
 import { SuggestionModal } from '@/components/SuggestionModal'
@@ -73,6 +74,66 @@ export default function BoardPage({ params }: { params: { id: string } }) {
   const { mutate: finalizeSug, isPending: finalizePending } = useMutation({
     mutationFn: (id: string) => suggestionsApi.finalize(id),
     onSuccess:  invalidate,
+  })
+
+  // ── WebMCP tools ──────────────────────────────────────────────
+  // Exposes this board to AI agents so they can drop recommended
+  // places straight onto the Stay/Eat/Visit boards. See
+  // https://developer.chrome.com/docs/ai/webmcp
+
+  useWebMCP({
+    name: 'get_trip_board_info',
+    description:
+      'Read the current trip (name, destination, dates, invite code) and every suggestion already on the Stay/Eat/Visit boards. Call this before adding recommendations so you know what has already been suggested and can avoid duplicates.',
+    annotations: { readOnlyHint: true },
+    async execute() {
+      const [stay, eat, visit] = await Promise.all(
+        (['stay', 'eat', 'visit'] as BoardType[]).map(b => suggestionsApi.list(params.id, b))
+      )
+      const summarize = (list: { suggestions: Suggestion[] }) =>
+        list.suggestions.map(s => ({ name: s.name, description: s.description, price: s.price, url: s.url, is_finalized: s.is_finalized }))
+      return {
+        trip: trip
+          ? { name: trip.name, destination: trip.destination, start_date: trip.start_date, end_date: trip.end_date, invite_code: trip.invite_code }
+          : null,
+        suggestions: { stay: summarize(stay), eat: summarize(eat), visit: summarize(visit) },
+      }
+    },
+  })
+
+  useWebMCP({
+    name: 'add_recommended_suggestion',
+    description:
+      'Add a recommended place (hotel, restaurant, or attraction) to this trip\'s Stay/Eat/Visit board, e.g. a personalized recommendation for the destination. Call once per place — call it again for each additional recommendation.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        board: { type: 'string', enum: ['stay', 'eat', 'visit'], description: 'Which board to add the place to: stay, eat, or visit' },
+        name: { type: 'string', description: 'Name of the place, e.g. "Zostel Goa"' },
+        description: { type: 'string', description: 'Why it is recommended, e.g. "Great vibes, near the beach, budget friendly"' },
+        price: { type: 'string', description: 'Price hint, e.g. "₹800/night" or "$$"' },
+        url: { type: 'string', description: 'Link to more info (booking site, maps, menu, etc.)' },
+      },
+      required: ['board', 'name'],
+    },
+    annotations: { readOnlyHint: false },
+    async execute(args: { board: BoardType; name: string; description?: string; price?: string; url?: string }) {
+      if (!memberId) {
+        throw new Error('You need to join this trip before adding suggestions — open the invite link and enter your name first.')
+      }
+      const { suggestion } = await suggestionsApi.create({
+        trip_id: params.id,
+        member_id: memberId,
+        board_type: args.board,
+        name: args.name.trim(),
+        description: args.description?.trim() || undefined,
+        price: args.price?.trim() || undefined,
+        url: args.url?.trim() || undefined,
+      })
+      queryClient.invalidateQueries({ queryKey: ['suggestions', params.id, args.board] })
+      if (args.board !== tab) router.push(`/trip/${params.id}/board?tab=${args.board}`)
+      return `Added "${suggestion.name}" to the ${args.board} board.`
+    },
   })
 
   // ── Helpers ───────────────────────────────────────────────────

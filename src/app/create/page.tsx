@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { useWebMCP } from 'use-webmcp-tool'
 import { tripsApi } from '@/lib/api'
 import { useAppStore } from '@/lib/store'
 
@@ -21,20 +22,57 @@ export default function CreateTripPage() {
 
   function set(k: string, v: string) { setForm(f => ({ ...f, [k]: v })) }
 
-  async function handleCreate() {
-    if (!form.name || !form.destination || !form.start_date || !form.end_date || !form.creator_name.trim()) {
-      setError('Please fill in all fields'); return
+  // Shared by the submit button and the create_trip WebMCP tool below.
+  async function createTrip(data: typeof form) {
+    if (!data.name || !data.destination || !data.start_date || !data.end_date || !data.creator_name.trim()) {
+      throw new Error('Please fill in all fields: name, destination, start_date, end_date, creator_name')
     }
     setLoading(true); setError('')
     try {
-      const { trip, member, session_token } = await tripsApi.create({ ...form })
+      const { trip, member, session_token } = await tripsApi.create({ ...data })
       if (session_token) {
         setGuestSession({ member_id: member.id, trip_id: trip.id, display_name: member.display_name, session_token })
       }
       router.push(`/trip/${trip.id}/created`)
-    } catch (e: any) { setError(e.message || 'Failed to create trip') }
-    finally { setLoading(false) }
+      return trip
+    } catch (e: any) {
+      setError(e.message || 'Failed to create trip')
+      throw e
+    } finally {
+      setLoading(false)
+    }
   }
+
+  async function handleCreate() {
+    try { await createTrip(form) } catch { /* error already shown in UI */ }
+  }
+
+  // Lets an AI agent (e.g. Chrome's built-in assistant) fill in and submit
+  // this form on the user's behalf — see https://developer.chrome.com/docs/ai/webmcp
+  useWebMCP({
+    name: 'create_trip',
+    description:
+      "Create a new PackedUp trip. Fills in and submits the trip creation form with the given name, destination, date range, and creator's display name, then navigates to the trip's invite page.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', description: 'Trip name, e.g. "Goa 2025"' },
+        destination: { type: 'string', description: 'Destination city/country, e.g. "Goa, India"' },
+        start_date: { type: 'string', description: 'Trip start date, formatted YYYY-MM-DD' },
+        end_date: { type: 'string', description: 'Trip end date, formatted YYYY-MM-DD' },
+        creator_name: { type: 'string', description: "Display name of the person creating the trip" },
+      },
+      required: ['name', 'destination', 'start_date', 'end_date', 'creator_name'],
+    },
+    annotations: { readOnlyHint: false },
+    async execute(args: typeof form) {
+      const merged = { ...form, ...args }
+      setForm(merged)
+      const trip = await createTrip(merged)
+      const inviteLink = typeof window !== 'undefined' ? `${window.location.origin}/join/${trip.invite_code}` : trip.invite_code
+      return `Created trip "${trip.name}" to ${trip.destination} (${trip.start_date} → ${trip.end_date}). Invite code: ${trip.invite_code}. Invite link: ${inviteLink}`
+    },
+  })
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
