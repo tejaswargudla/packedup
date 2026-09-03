@@ -88,7 +88,6 @@ export default function TripDashboard({ params }: { params: { id: string } }) {
             {[
               { label: 'Dashboard',      icon: '◈', active: true,  href: `/trip/${params.id}` },
               { label: 'Boards',         icon: '◫', active: false, href: `/trip/${params.id}/board` },
-              { label: 'Add Suggestion', icon: '+', active: false, href: `/trip/${params.id}/add` },
               { label: 'Itinerary',      icon: '≡', active: false, href: `/trip/${params.id}/itinerary` },
             ].map(item => (
               <div key={item.label} onClick={() => router.push(item.href)} style={{

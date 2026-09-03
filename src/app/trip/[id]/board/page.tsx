@@ -180,7 +180,6 @@ export default function BoardPage({ params }: { params: { id: string } }) {
             {[
               { label: 'Dashboard',      icon: '◈', active: false, href: `/trip/${params.id}` },
               { label: 'Boards',         icon: '◫', active: true,  href: `/trip/${params.id}/board` },
-              { label: 'Add Suggestion', icon: '+', active: false, href: `/trip/${params.id}/add` },
               { label: 'Itinerary',      icon: '≡', active: false, href: `/trip/${params.id}/itinerary` },
             ].map(item => (
               <div key={item.label} onClick={() => router.push(item.href)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 14px', fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase', cursor: 'pointer', color: item.active ? 'var(--gold)' : 'var(--muted)', border: `1px solid ${item.active ? 'rgba(255,140,66,0.12)' : 'transparent'}`, background: item.active ? 'rgba(255,140,66,0.06)' : 'transparent', transition: 'all 0.2s' }}>
@@ -256,7 +255,10 @@ export default function BoardPage({ params }: { params: { id: string } }) {
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', padding: '80px 0' }}>
                 <div style={{ fontSize: '40px', marginBottom: '16px' }}>{board.emoji}</div>
                 <h2 style={{ fontSize: '28px', fontWeight: 400, letterSpacing: '-0.5px', marginBottom: '8px' }}>No suggestions yet</h2>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--muted)', textTransform: 'uppercase' }}>Be the first to suggest a place</p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '32px' }}>Be the first to suggest a place</p>
+                <button onClick={() => setModalOpen(true)} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', padding: '14px 36px', background: 'var(--gold)', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                  + Add Suggestion
+                </button>
               </motion.div>
             )}
 
